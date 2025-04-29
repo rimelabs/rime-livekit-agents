@@ -19,14 +19,17 @@ from livekit.agents.voice import MetricsCollectedEvent
 from livekit.plugins import (
     openai,
     noise_cancellation,
+    rime,
     silero,
 )
 from livekit.agents.tokenize import tokenizer
 
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
-from rime.tts import RimeTTS
 from agent_configs import VOICE_CONFIGS
+
+# demonstrating use of url param for bring your own api.
+RIME_API_URL = "https://users.rime.ai/v1/rime-tts"
 
 load_dotenv()
 logger = logging.getLogger("voice-agent")
@@ -51,9 +54,9 @@ async def entrypoint(ctx: JobContext):
 
     logger.info(f"Running Rime voice agent for voice config {VOICE} and participant {participant.identity}")
 
-    rime_tts = RimeTTS(
-        tts_options=VOICE_CONFIGS[VOICE]["rime_tts_options"],
-        logger=logger
+    rime_tts = rime.TTS(
+        **VOICE_CONFIGS[VOICE]["tts_options"],
+        url=RIME_API_URL
     )
     if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
         sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
