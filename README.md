@@ -47,3 +47,9 @@ To connect to your livekit server, add in the following env vars:
 
 Create a new voice, configs, and prompt in `voice_configs.py` then set the value of `VOICE` in the agent file.
 
+## Optional next steps
+
+If you want to deploy your agent to a production environment (see for example the [Rime homepage demo](https://rime.ai/), you'll want to do the following:
+
+1. Add a frontend and connect it to LiveKit ([documentation](https://docs.livekit.io/agents/start/voice-ai/#connect-to-playground))
+2. Deploy your agent with Render or another orchestration service ([documentation](https://docs.livekit.io/agents/ops/deployment/)
