@@ -30,7 +30,7 @@ VOICE_CONFIGS = {
         "tts_options": {
             "model": "arcana",
             "speaker": "celeste",
-            "repetition_penalty": 1.40,
+            "repetition_penalty": 1.5,
             "max_tokens": 3400,
             "temperature": .65,
             "top_p": .95

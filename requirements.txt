@@ -27,12 +27,13 @@ humanfriendly==10.0
 idna==3.10
 Jinja2==3.1.6
 jiter==0.9.0
-livekit==1.0.6
-livekit-agents @ git+https://github.com/livekit/agents.git@562dbde56d917c344e3fdf5d36c23104796ccb2a#subdirectory=livekit-agents
+livekit==1.0.7
+livekit-agents==1.0.20
 livekit-api==1.0.2
+livekit-plugins-cartesia==1.0.20
 livekit-plugins-noise-cancellation==0.2.1
-livekit-plugins-openai==1.0.11
-livekit-plugins-rime @ git+https://github.com/rimelabs/livekit-agents.git@d4efaaa6820739a7fa479c4451a326e8f623fe4d#subdirectory=livekit-plugins/livekit-plugins-rime
+livekit-plugins-openai==1.0.20
+livekit-plugins-rime @ git+https://github.com/rimelabs/livekit-agents.git@bddcc0d265176bb6b3a6b32d6773e7980e08790c#subdirectory=livekit-plugins/livekit-plugins-rime
 livekit-plugins-silero==1.0.11
 livekit-plugins-turn-detector==1.0.11
 livekit-protocol==1.0.1
