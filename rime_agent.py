@@ -17,6 +17,7 @@ from livekit.agents import (
 )
 from livekit.agents.voice import MetricsCollectedEvent
 from livekit.plugins import (
+    cartesia,
     openai,
     noise_cancellation,
     rime,
@@ -51,21 +52,24 @@ async def entrypoint(ctx: JobContext):
 
     logger.info(f"Running Rime voice agent for voice config {VOICE} and participant {participant.identity}")
 
-    rime_tts = rime.TTS(
-        **VOICE_CONFIGS[VOICE]["tts_options"]
-    )
+    # rime_tts = rime.TTS(
+    #     **VOICE_CONFIGS[VOICE]["tts_options"]
+    # )
+    
+    cartesia_tts = cartesia.TTS(model="sonic-2", voice="bf0a246a-8642-498a-9950-80c35e9276b5")
+
     if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
         sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
         if not isinstance(sentence_tokenizer, tokenizer.SentenceTokenizer):
             raise TypeError(
                 f"Expected sentence_tokenizer to be an instance of tokenizer.SentenceTokenizer, got {type(sentence_tokenizer)}"
             )
-        rime_tts = tts.StreamAdapter(tts=rime_tts, sentence_tokenizer=sentence_tokenizer)
+        cartesia_tts = tts.StreamAdapter(tts=cartesia_tts, sentence_tokenizer=sentence_tokenizer)
 
     session = AgentSession(
         stt=openai.STT(),
         llm=openai.LLM(model="gpt-4o-mini"),
-        tts=rime_tts,
+        tts=cartesia_tts,
         vad=ctx.proc.userdata["vad"],
         turn_detection=MultilingualModel()
     )
