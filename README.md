@@ -55,8 +55,7 @@ If you want to deploy your agent to a production environment (see for example th
 2. Deploy your agent with Render or another orchestration service ([documentation](https://docs.livekit.io/agents/ops/deployment/))
 
 
-
-## WARNINGS
+## ⚠️ WARNING ⚠️
 
 This demo agent is using a fork of `livekit-plugins-rime` as of 5/14/2025 to patch a timeout issue when using `arcana`, as this new model takes much longer to synthesize highly expressive and long-context-window utterances.
 
