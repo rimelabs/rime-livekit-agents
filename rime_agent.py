@@ -28,15 +28,12 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 from agent_configs import VOICE_CONFIGS
 
-# demonstrating use of url param for bring your own api.
-RIME_API_URL = "https://users.rime.ai/v1/rime-tts"
-
 load_dotenv()
 logger = logging.getLogger("voice-agent")
 
 VOICE_NAMES = ["hank", "celeste"]
 # randomly select a voice from the list
-VOICE = random.choice(VOICE_NAMES)
+VOICE = "celeste"
 
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
@@ -55,8 +52,7 @@ async def entrypoint(ctx: JobContext):
     logger.info(f"Running Rime voice agent for voice config {VOICE} and participant {participant.identity}")
 
     rime_tts = rime.TTS(
-        **VOICE_CONFIGS[VOICE]["tts_options"],
-        url=RIME_API_URL
+        **VOICE_CONFIGS[VOICE]["tts_options"]
     )
     if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
         sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
