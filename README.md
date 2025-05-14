@@ -57,11 +57,11 @@ If you want to deploy your agent to a production environment (see for example th
 
 ## ⚠️ WARNING ⚠️
 
-This demo agent is using a fork of `livekit-plugins-rime` as of 5/14/2025 to patch a timeout issue when using `arcana`, as this new model takes much longer to synthesize highly expressive and long-context-window utterances.
+This demo agent is using a fork of `livekit-plugins-rime` as of 5/14/2025 to patch a timeout issue where **audio cutting off** during long utterances with `arcana`, as this new model takes much longer to synthesize highly expressive and long-context-window utterances.
 
-You can use the `requirements.txt` in this repo to also pull in these changes, but note that they are a temporary hack for demonstration purposes while we work on changes upstream.
+You can see the version of `livekit-plugins-rime` in `requirements.txt` here, but note that this is a temporary hack for demonstration purposes while we work on changes upstream.
 
-You can also install that fork of `livekit-plugins-rime` that solves the issue of **audio cutting off** during long utterances with
+You can also install that fork of `livekit-plugins-rime` with
 ```bash
 pip uninstall livekit-plugins-rime # if its already installed
 
