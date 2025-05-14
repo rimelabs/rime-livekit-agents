@@ -33,7 +33,7 @@ logger = logging.getLogger("voice-agent")
 
 VOICE_NAMES = ["hank", "celeste"]
 # randomly select a voice from the list
-VOICE = "celeste"
+VOICE = random.choice(VOICE_NAMES)
 
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()

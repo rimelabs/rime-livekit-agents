@@ -53,3 +53,18 @@ If you want to deploy your agent to a production environment (see for example th
 
 1. Add a frontend and connect it to LiveKit ([documentation](https://docs.livekit.io/agents/start/voice-ai/#connect-to-playground))
 2. Deploy your agent with Render or another orchestration service ([documentation](https://docs.livekit.io/agents/ops/deployment/))
+
+
+
+## WARNINGS
+
+This demo agent is using a fork of `livekit-plugins-rime` as of 5/14/2025 to patch a timeout issue when using `arcana`, as this new model takes much longer to synthesize highly expressive and long-context-window utterances.
+
+You can use the `requirements.txt` in this repo to also pull in these changes, but note that they are a temporary hack for demonstration purposes while we work on changes upstream.
+
+You can also install that fork of `livekit-plugins-rime` that solves the issue of **audio cutting off** during long utterances with
+```bash
+pip uninstall livekit-plugins-rime # if its already installed
+
+pip install git+https://github.com/rimelabs/livekit-agents.git@matt/rime/debugging_playback_agent#subdirectory=livekit-plugins/livekit-plugins-rime
+```
