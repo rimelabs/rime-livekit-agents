@@ -22,7 +22,7 @@ from livekit.plugins import (
     silero,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from text_utils import ArcanaSentenceTokenizer
+from backend.sentence_tokenizer import ArcanaSentenceTokenizer
 
 load_dotenv()
 logger = logging.getLogger("voice-agent")
@@ -33,6 +33,7 @@ VOICE = random.choice(VOICE_NAMES)
 
 
 def prewarm(proc: JobProcess):
+    """Initialize VAD model for voice activity detection."""
     proc.userdata["vad"] = silero.VAD.load()
 
 
@@ -46,6 +47,7 @@ class RimeAssistant(Agent):
 
 
 async def entrypoint(ctx: JobContext):
+    """Set up and start the voice assistant session."""
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
     await ctx.wait_for_participant()
 

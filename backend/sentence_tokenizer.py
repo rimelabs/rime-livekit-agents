@@ -7,13 +7,17 @@ from livekit.agents.tokenize import token_stream, tokenizer
 
 _sentence_pattern = re.compile(r".+?[,，.。!！?？:：]", re.DOTALL)
 
+
 @dataclass
 class _TokenizerOptions:
     language: str
     min_sentence_len: int
     stream_context_len: int
 
+
 class ArcanaSentenceTokenizer(tokenizer.SentenceTokenizer):
+    """Tokenizer that segments text into sentences with configurable length and context."""
+
     def __init__(
         self,
         *,
@@ -28,10 +32,12 @@ class ArcanaSentenceTokenizer(tokenizer.SentenceTokenizer):
         )
 
     def tokenize(self, text: str, *, language: str | None = None) -> List[str]:
+        """Split text into sentences, returning only the sentence strings."""
         sentences = self.sentence_segmentation(text)
         return [sentence[0] for sentence in sentences]
 
     def stream(self, *, language: str | None = None) -> tokenizer.SentenceStream:
+        """Create a buffered stream for processing sentences with context."""
         return token_stream.BufferedSentenceStream(
             tokenizer=functools.partial(self.sentence_segmentation),
             min_token_len=self._config.min_sentence_len,
@@ -39,8 +45,9 @@ class ArcanaSentenceTokenizer(tokenizer.SentenceTokenizer):
         )
 
     def sentence_segmentation(self, text: str) -> List[Tuple[str, int, int]]:
+        """Split text into sentences with their start and end positions."""
         # arcana doesn't like unicode quotes
-        text = text.replace(u"\u2018", "'").replace(u"\u2019", "'")
+        text = text.replace("\u2018", "'").replace("\u2019", "'")
         result = []
         start_pos = 0
 
