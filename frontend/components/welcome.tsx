@@ -33,23 +33,11 @@ export const Welcome = ({
       </svg>
 
       <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
-        Chat live with your voice AI agent
+        Connect with your personal Rime AI assistant
       </p>
       <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
         {startButtonText}
       </Button>
-      <p className="text-fg1 m fixed bottom-5 left-1/2 w-full max-w-prose -translate-x-1/2 pt-1 text-xs leading-5 font-normal text-pretty md:text-sm">
-        Need help getting set up? Check out the{' '}
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://docs.livekit.io/agents/start/voice-ai/"
-          className="underline"
-        >
-          Voice AI quickstart
-        </a>
-        .
-      </p>
     </div>
   );
 };

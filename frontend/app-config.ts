@@ -10,9 +10,9 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   supportsScreenShare: true,
   isPreConnectBufferEnabled: true,
 
-  logo: '/rime-white.svg',
+  logo: '/rime-black.svg',
   accent: '#000000',
-  logoDark: '/rime-black.svg',
+  logoDark: '/rime-white.svg',
   accentDark: '#FFFFFF',
   startButtonText: 'Start conversation',
 };

@@ -18,24 +18,13 @@ export default async function AppLayout({ children }: AppLayoutProps) {
           href="https://livekit.io"
           className="scale-100 transition-transform duration-300 hover:scale-110"
         >
-          <img src={logo} alt={`${companyName} Logo`} className="block size-6 dark:hidden" />
+          <img src={logo} alt={`${companyName} Logo`} className="block size-24 dark:hidden" />
           <img
             src={logoDark ?? logo}
             alt={`${companyName} Logo`}
-            className="hidden size-6 dark:block"
+            className="hidden size-24 dark:block"
           />
         </a>
-        <span className="text-foreground font-mono text-xs font-bold tracking-wider uppercase">
-          Built with{' '}
-          <a
-            target="_blank"
-            rel="noopener noreferrer"
-            href="https://docs.livekit.io/agents"
-            className="underline underline-offset-4"
-          >
-            LiveKit Agents
-          </a>
-        </span>
       </header>
       {children}
     </>
