@@ -22,7 +22,7 @@ from livekit.plugins import (
     silero,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from backend.sentence_tokenizer import ArcanaSentenceTokenizer
+from sentence_tokenizer import ArcanaSentenceTokenizer
 
 load_dotenv()
 logger = logging.getLogger("voice-agent")
