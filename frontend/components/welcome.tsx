@@ -35,7 +35,12 @@ export const Welcome = ({
       <p className="text-fg1 max-w-prose pt-1 leading-6 font-medium">
         Connect with your personal Rime AI assistant
       </p>
-      <Button variant="primary" size="lg" onClick={onStartCall} className="mt-6 w-64 font-mono">
+      <Button
+        variant="primary"
+        size="lg"
+        onClick={onStartCall}
+        className="mt-6 w-64 bg-gradient-to-tr from-[#a1a1aa] via-[#ffffff] to-[#a1a1aa] font-mono text-zinc-800 transition-all duration-300 hover:bg-gradient-to-tr hover:from-[#27272a] hover:via-[#71717a] hover:to-[#27272a] hover:text-white"
+      >
         {startButtonText}
       </Button>
     </div>
