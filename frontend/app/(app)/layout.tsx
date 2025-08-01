@@ -16,22 +16,22 @@ export default async function AppLayout({ children }: AppLayoutProps) {
         <a
           target="_blank"
           rel="noopener noreferrer"
-          href="https://livekit.io"
+          href="https://www.rime.ai/"
           className="scale-100 transition-transform duration-300 hover:scale-110"
         >
           <Image
-            width={100}
-            height={100}
+            width={90}
+            height={90}
             src={logo}
             alt={`${companyName} Logo`}
-            className="block0 dark:hidden"
+            className="block h-auto max-h-[30px] w-auto dark:hidden"
           />
           <Image
-            width={140}
-            height={140}
+            width={90}
+            height={90}
             src={logoDark ?? logo}
             alt={`${companyName} Logo`}
-            className="hidden h-6 dark:block"
+            className="hidden h-auto max-h-[32px] w-auto dark:block"
           />
         </a>
       </header>
