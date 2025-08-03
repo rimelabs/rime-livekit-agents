@@ -20,12 +20,13 @@ interface AppProps {
 
 export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
-  const [sessionStarted, setSessionStarted] = useState(false);
+  const [sessionStarted, setSessionStarted] = useState(true);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const onDisconnected = () => {
-      setSessionStarted(false);
+      setSessionStarted(true);
       refreshConnectionDetails();
     };
     const onMediaDevicesError = (error: Error) => {
@@ -90,19 +91,31 @@ export function App({ appConfig }: AppProps) {
         <RoomAudioRenderer />
         <StartAudio label="Start Audio" />
         {/* --- */}
-        <MotionSessionView
-          key="session-view"
-          appConfig={appConfig}
-          disabled={!sessionStarted}
-          sessionStarted={sessionStarted}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: sessionStarted ? 1 : 0 }}
-          transition={{
-            duration: 0.5,
-            ease: 'linear',
-            delay: sessionStarted ? 0.5 : 0,
-          }}
-        />
+        <div className="flex flex-row">
+          <div className="relative flex-1">
+            <MotionSessionView
+              key="session-view"
+              appConfig={appConfig}
+              disabled={!sessionStarted}
+              sessionStarted={sessionStarted}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: sessionStarted ? 1 : 0 }}
+              transition={{
+                duration: 0.5,
+                ease: 'linear',
+                delay: sessionStarted ? 0.5 : 0,
+              }}
+            />
+          </div>
+          {sidebarOpen && (
+            <div
+              onClick={() => setSidebarOpen(false)}
+              className="bg-background z-50 h-screen w-[400]"
+            >
+              sdsdsd
+            </div>
+          )}
+        </div>
       </RoomContext.Provider>
 
       <Toaster />

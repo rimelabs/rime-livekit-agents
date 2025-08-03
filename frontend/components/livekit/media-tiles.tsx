@@ -122,7 +122,7 @@ export function MediaTiles({ chatOpen }: MediaTilesProps) {
   const isAvatar = agentVideoTrack !== undefined;
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
+    <div className="pointer-events-none absolute inset-x-0 top-8 bottom-32 z-50 md:top-12 md:bottom-40">
       <div className="relative mx-auto h-full max-w-2xl px-4 md:px-0">
         <div className={cn(classNames.grid)}>
           {/* agent */}

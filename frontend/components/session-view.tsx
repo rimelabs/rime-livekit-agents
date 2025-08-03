@@ -90,11 +90,12 @@ export const SessionView = ({
     <main
       ref={ref}
       inert={disabled}
-      className={
+      className={cn(
         // prevent page scrollbar
         // when !chatOpen due to 'translate-y-20'
-        cn(!chatOpen && 'max-h-svh overflow-hidden')
-      }
+        !chatOpen && 'max-h-svh overflow-hidden',
+        'relative z-[99999] flex h-screen'
+      )}
     >
       <ChatMessageView
         className={cn(
@@ -119,14 +120,13 @@ export const SessionView = ({
         </div>
       </ChatMessageView>
 
-      <div className="bg-background mp-12 fixed top-0 right-0 left-0 h-32 md:h-36">
-        {/* skrim */}
+      {/* <div className="bg-background mp-12 fixed top-0 right-0 left-0 h-32 md:h-36">
         <div className="from-background absolute bottom-0 left-0 h-12 w-full translate-y-full bg-gradient-to-b to-transparent" />
-      </div>
+      </div> */}
 
       <MediaTiles chatOpen={chatOpen} />
 
-      <div className="bg-background fixed right-0 bottom-0 left-0 z-50 px-3 pt-2 pb-3 md:px-12 md:pb-12">
+      <div className="bg-background absolute right-0 bottom-0 z-[99999] w-full px-3 pt-2 pb-3 md:px-12 md:pb-12">
         <motion.div
           key="control-bar"
           initial={{ opacity: 0, translateY: '100%' }}
@@ -166,7 +166,7 @@ export const SessionView = ({
               onSendMessage={handleSendMessage}
             />
           </div>
-          {/* skrim */}
+
           <div className="from-background border-background absolute top-0 left-0 h-12 w-full -translate-y-full bg-gradient-to-t to-transparent" />
         </motion.div>
       </div>
