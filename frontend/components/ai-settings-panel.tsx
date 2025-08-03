@@ -75,66 +75,30 @@ export function AISettingsPanel() {
 
       {/* Voice Section */}
       <div className="space-y-4">
-        <h2 className="text-foreground text-xl font-semibold">Voice:</h2>
-
-        <RadioGroup
-          value={voiceType}
-          onValueChange={(value) => setVoiceType(value as VoiceType)}
-          className="space-y-4"
-        >
-          <div className="flex items-center space-x-3">
-            <RadioGroupItem value="prebuilt" id="prebuilt" />
-            <Label
-              htmlFor="prebuilt"
-              className="text-foreground cursor-pointer text-base font-medium"
+        <div className="space-y-1.5">
+          <Label htmlFor="voice-select" className="text-xs font-medium">
+            Select Voice
+          </Label>
+          <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+            <SelectTrigger
+              id="voice-select"
+              className="w-full rounded-md border-neutral-700 bg-neutral-900 text-neutral-100 hover:bg-neutral-800 focus:ring-neutral-700"
             >
-              Pre-built
-            </Label>
-          </div>
-
-          {voiceType === 'prebuilt' && (
-            <div className="ml-7 space-y-3">
-              <Select value={selectedVoice} onValueChange={setSelectedVoice}>
-                <SelectTrigger className="border-border bg-background text-foreground w-full">
-                  <SelectValue />
-                  <ChevronDown className="text-muted-foreground h-4 w-4" />
-                </SelectTrigger>
-                <SelectContent className="border-border bg-popover">
-                  {prebuiltVoices.map((voice) => (
-                    <SelectItem
-                      key={voice.value}
-                      value={voice.value}
-                      className="text-popover-foreground hover:bg-accent hover:text-accent-foreground"
-                    >
-                      {voice.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <div className="flex items-center space-x-3">
-            <RadioGroupItem value="custom" id="custom" />
-            <Label
-              htmlFor="custom"
-              className="text-foreground cursor-pointer text-base font-medium"
-            >
-              Make your own <span className="text-muted-foreground">(beta)</span>
-            </Label>
-          </div>
-
-          {voiceType === 'custom' && (
-            <div className="ml-7">
-              <textarea
-                value={customVoiceDescription}
-                onChange={(e) => setCustomVoiceDescription(e.target.value)}
-                placeholder='Describe the voice, eg. "posh British woman" or "French chef from the countryside"'
-                className="border-border bg-background text-foreground placeholder-muted-foreground focus:border-ring focus:ring-ring h-24 w-full resize-none rounded-lg border p-3 focus:ring-2 focus:outline-none"
-              />
-            </div>
-          )}
-        </RadioGroup>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-md border-neutral-700 bg-neutral-900 text-neutral-100">
+              {prebuiltVoices.map((voice) => (
+                <SelectItem
+                  key={voice.value}
+                  value={voice.value}
+                  className="text-popover-foreground hover:bg-accent hover:text-accent-foreground"
+                >
+                  {voice.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Settings Section */}

@@ -91,7 +91,7 @@ export function App({ appConfig }: AppProps) {
 
       <RoomContext.Provider value={room}>
         <RoomAudioRenderer />
-        <StartAudio label="Start Audio" />
+        {/* <StartAudio label="Start Audio" /> */}
         {/* --- */}
         <div className="flex flex-row">
           <div className="relative flex-1">
@@ -117,7 +117,7 @@ export function App({ appConfig }: AppProps) {
             )}
             {sidebarOpen && (
               <div className="bg-background relative z-50 flex h-screen w-screen flex-col md:w-[400px]">
-                <div className="flex h-[50px] w-full items-center justify-end pr-3">
+                <div className="flex h-[50px] w-full items-center justify-end pr-3 md:hidden">
                   <button
                     onClick={() => setSidebarOpen(false)}
                     className="h-6 w-6 cursor-pointer rounded-4xl hover:bg-gray-100 hover:text-gray-500"
