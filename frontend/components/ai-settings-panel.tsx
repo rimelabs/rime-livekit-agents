@@ -142,8 +142,8 @@ export function AISettingsPanel() {
         {/* Temperature */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="text-foreground text-base font-medium">Temperature</Label>
-            <span className="text-foreground text-2xl font-bold">{temperature[0].toFixed(2)}</span>
+            <Label className="text-foreground text-sm font-medium">Temperature</Label>
+            <span className="text-foreground text-sm font-bold">{temperature[0].toFixed(2)}</span>
           </div>
           <Slider
             value={temperature}
@@ -162,8 +162,8 @@ export function AISettingsPanel() {
         {/* Repetition Penalty */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="text-foreground text-base font-medium">Repetition Penalty</Label>
-            <span className="text-foreground text-2xl font-bold">
+            <Label className="text-foreground text-sm font-medium">Repetition Penalty</Label>
+            <span className="text-foreground text-sm font-bold">
               {repetitionPenalty[0].toFixed(1)}
             </span>
           </div>
@@ -184,8 +184,8 @@ export function AISettingsPanel() {
         {/* Top P */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <Label className="text-foreground text-base font-medium">Top P</Label>
-            <span className="text-foreground text-2xl font-bold">{topP[0].toFixed(0)}</span>
+            <Label className="text-foreground text-sm font-medium">Top P</Label>
+            <span className="text-foreground text-sm font-bold">{topP[0].toFixed(0)}</span>
           </div>
           <Slider
             value={topP}
