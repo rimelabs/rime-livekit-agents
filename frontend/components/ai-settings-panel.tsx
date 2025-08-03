@@ -45,8 +45,8 @@ export function AISettingsPanel() {
             className={cn(
               'hover:border-border flex-1 cursor-pointer border transition-all duration-200',
               selectedModel === 'arcana'
-                ? 'border-primary from-primary/20 via-primary/40 to-primary/20 text-primary-foreground shadow-primary/20 bg-gradient-to-tl shadow-lg'
-                : 'text-card-foreground border-border bg-gradient-to-tl from-black via-neutral-700 to-black hover:border-neutral-500 hover:bg-gradient-to-tl hover:from-neutral-800 hover:via-neutral-600 hover:to-neutral-800 hover:shadow-lg'
+                ? 'border-neutral-500 bg-gradient-to-tr from-neutral-800 via-neutral-600 to-neutral-800 shadow-lg'
+                : 'text-card-foreground border-border bg-gradient-to-tr from-black via-neutral-700 to-black hover:border-neutral-500 hover:bg-gradient-to-tl hover:from-neutral-800 hover:via-neutral-600 hover:to-neutral-800 hover:shadow-lg'
             )}
             onClick={() => setSelectedModel('arcana')}
           >
@@ -60,7 +60,7 @@ export function AISettingsPanel() {
             className={cn(
               'hover:border-border flex-1 cursor-pointer border transition-all duration-200',
               selectedModel === 'mist'
-                ? 'border-primary from-primary/20 via-primary/40 to-primary/20 text-primary-foreground shadow-primary/20 bg-gradient-to-tl shadow-lg'
+                ? 'border-neutral-500 bg-gradient-to-tl from-neutral-800 via-neutral-600 to-neutral-800 shadow-lg'
                 : 'text-card-foreground border-border bg-gradient-to-tl from-black via-neutral-700 to-black hover:border-neutral-500 hover:bg-gradient-to-tl hover:from-neutral-800 hover:via-neutral-600 hover:to-neutral-800 hover:shadow-lg'
             )}
             onClick={() => setSelectedModel('mist')}

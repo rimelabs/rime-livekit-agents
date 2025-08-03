@@ -24,7 +24,7 @@ export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
   const [sessionStarted, setSessionStarted] = useState(true);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const onDisconnected = () => {
