@@ -5,7 +5,7 @@ export interface CombinedTranscription extends TranscriptionSegment {
   receivedAtMediaTimestamp: number;
   receivedAt: number;
 }
-export type ThemeMode = 'dark' | 'light' | 'system';
+
 
 export interface AppConfig {
   pageTitle: string;
@@ -26,8 +26,8 @@ export interface AppConfig {
 
 export interface SandboxConfig {
   [key: string]:
-    | { type: 'string'; value: string }
-    | { type: 'number'; value: number }
-    | { type: 'boolean'; value: boolean }
-    | null;
+  | { type: 'string'; value: string }
+  | { type: 'number'; value: number }
+  | { type: 'boolean'; value: boolean }
+  | null;
 }
