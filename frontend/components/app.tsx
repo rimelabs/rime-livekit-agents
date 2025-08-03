@@ -22,13 +22,13 @@ interface AppProps {
 
 export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
-  const [sessionStarted, setSessionStarted] = useState(true);
+  const [sessionStarted, setSessionStarted] = useState(false);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const onDisconnected = () => {
-      setSessionStarted(true);
+      setSessionStarted(false);
       refreshConnectionDetails();
     };
     const onMediaDevicesError = (error: Error) => {
@@ -115,7 +115,7 @@ export function App({ appConfig }: AppProps) {
                 <Settings />
               </div>
             )}
-            {sidebarOpen && (
+            {sidebarOpen && sessionStarted && (
               <div className="bg-background relative z-50 flex h-screen w-screen flex-col md:w-[400px]">
                 <div className="flex h-[50px] w-full items-center justify-end pr-3 md:hidden">
                   <button
