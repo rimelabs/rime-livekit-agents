@@ -5,6 +5,7 @@ import { Room, RoomEvent } from 'livekit-client';
 import { Settings, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
+import { AISettingsPanel } from '@/components/ai-settings-panel';
 import { toastAlert } from '@/components/alert-toast';
 import { SessionView } from '@/components/session-view';
 import { Toaster } from '@/components/ui/sonner';
@@ -125,8 +126,8 @@ export function App({ appConfig }: AppProps) {
                     <X className="h-5" />
                   </button>
                 </div>
-                <div className="r h-[calc(100vh-50px)] overflow-auto">
-                  Sidebar content goes here
+                <div className="h-[calc(100vh-50px)] overflow-auto">
+                  <AISettingsPanel />
                 </div>
               </div>
             )}
