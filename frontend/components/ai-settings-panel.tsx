@@ -27,12 +27,21 @@ export function AISettingsPanel() {
   const [temperature, setTemperature] = useState([0.71]);
   const [repetitionPenalty, setRepetitionPenalty] = useState([1.5]);
   const [topP, setTopP] = useState([1.0]);
+  const [selectedAgent, setSelectedAgent] = useState('general');
 
   const prebuiltVoices = [
     { value: 'luna', label: 'Luna' },
     { value: 'aria', label: 'Aria' },
     { value: 'nova', label: 'Nova' },
     { value: 'echo', label: 'Echo' },
+  ];
+  const prebuiltAgents = [
+    { value: 'general', label: 'General' },
+    { value: 'finance', label: 'Finance' },
+    { value: 'legal', label: 'Legal' },
+    { value: 'medical', label: 'Medical' },
+    { value: 'tech', label: 'Tech' },
+    { value: 'marketing', label: 'Marketing' },
   ];
 
   return (
@@ -101,10 +110,35 @@ export function AISettingsPanel() {
         </div>
       </div>
 
+      <div className="space-y-4">
+        <div className="space-y-1.5">
+          <Label htmlFor="voice-select" className="text-xs font-medium">
+            Select Agent
+          </Label>
+          <Select value={selectedAgent} onValueChange={setSelectedAgent}>
+            <SelectTrigger
+              id="voice-select"
+              className="w-full rounded-md border-neutral-700 bg-neutral-900 text-neutral-100 hover:bg-neutral-800 focus:ring-neutral-700"
+            >
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-md border-neutral-700 bg-neutral-900 text-neutral-100">
+              {prebuiltAgents.map((agent) => (
+                <SelectItem
+                  key={agent.value}
+                  value={agent.value}
+                  className="text-popover-foreground hover:bg-accent hover:text-accent-foreground"
+                >
+                  {agent.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
       {/* Settings Section */}
       <div className="space-y-6">
-        <h2 className="text-foreground text-xl font-semibold">Settings:</h2>
-
         {/* Temperature */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
