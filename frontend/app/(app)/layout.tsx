@@ -24,14 +24,14 @@ export default async function AppLayout({ children }: AppLayoutProps) {
             height={90}
             src={logo}
             alt={`${companyName} Logo`}
-            className="block h-auto max-h-[30px] w-auto dark:hidden"
+            className="block h-auto max-h-[25px] w-auto dark:hidden"
           />
           <Image
             width={90}
             height={90}
             src={logoDark ?? logo}
             alt={`${companyName} Logo`}
-            className="hidden h-auto max-h-[32px] w-auto dark:block"
+            className="hidden h-auto max-h-[25px] w-auto dark:block"
           />
         </a>
       </header>
