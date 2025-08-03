@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Room, RoomEvent } from 'livekit-client';
+import { Settings } from 'lucide-react';
 import { motion } from 'motion/react';
 import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
 import { toastAlert } from '@/components/alert-toast';
@@ -22,7 +23,7 @@ export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
   const [sessionStarted, setSessionStarted] = useState(true);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const onDisconnected = () => {
@@ -107,14 +108,21 @@ export function App({ appConfig }: AppProps) {
               }}
             />
           </div>
-          {sidebarOpen && (
-            <div
-              onClick={() => setSidebarOpen(false)}
-              className="bg-background z-50 h-screen w-[400]"
-            >
-              sdsdsd
-            </div>
-          )}
+          <div>
+            {!sidebarOpen && (
+              <div className="p-6" onClick={() => setSidebarOpen(true)}>
+                <Settings />
+              </div>
+            )}
+            {sidebarOpen && (
+              <div
+                onClick={() => setSidebarOpen(false)}
+                className="bg-background z-50 h-screen w-[400]"
+              >
+                sdsdsd
+              </div>
+            )}
+          </div>
         </div>
       </RoomContext.Provider>
 
