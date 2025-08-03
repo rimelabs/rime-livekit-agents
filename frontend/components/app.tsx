@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Room, RoomEvent } from 'livekit-client';
-import { Settings } from 'lucide-react';
+import { Settings, X } from 'lucide-react';
 import { motion } from 'motion/react';
 import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
 import { toastAlert } from '@/components/alert-toast';
@@ -110,16 +110,24 @@ export function App({ appConfig }: AppProps) {
           </div>
           <div>
             {!sidebarOpen && (
-              <div className="p-6" onClick={() => setSidebarOpen(true)}>
+              <div className="cursor-pointer p-4" onClick={() => setSidebarOpen(true)}>
                 <Settings />
               </div>
             )}
             {sidebarOpen && (
-              <div
-                onClick={() => setSidebarOpen(false)}
-                className="bg-background z-50 h-screen w-[400]"
-              >
-                sdsdsd
+              <div className="bg-background relative z-50 flex h-screen w-screen flex-col md:w-[400px]">
+                <div className="flex h-[50px] w-full items-center justify-end pr-3">
+                  <button
+                    onClick={() => setSidebarOpen(false)}
+                    className="h-6 w-6 cursor-pointer rounded-4xl hover:bg-gray-100 hover:text-gray-500"
+                    aria-label="Close sidebar"
+                  >
+                    <X className="h-5" />
+                  </button>
+                </div>
+                <div className="r h-[calc(100vh-50px)] overflow-auto">
+                  Sidebar content goes here
+                </div>
               </div>
             )}
           </div>
