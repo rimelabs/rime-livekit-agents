@@ -6,8 +6,8 @@ export const APP_CONFIG_DEFAULTS: AppConfig = {
   pageDescription: 'AI Voice Agent with Personality',
 
   supportsChatInput: true,
-  supportsVideoInput: true,
-  supportsScreenShare: true,
+  supportsVideoInput: false,
+  supportsScreenShare: false,
   isPreConnectBufferEnabled: true,
 
   logo: '/rime-black.svg',
