@@ -2,10 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { Room, RoomEvent } from 'livekit-client';
-import { Settings, X } from 'lucide-react';
 import { motion } from 'motion/react';
-import { RoomAudioRenderer, RoomContext, StartAudio } from '@livekit/components-react';
-import { AISettingsPanel } from '@/components/ai-settings-panel';
+import { RoomAudioRenderer, RoomContext } from '@livekit/components-react';
 import { toastAlert } from '@/components/alert-toast';
 import { SessionView } from '@/components/session-view';
 import { Toaster } from '@/components/ui/sonner';
@@ -24,7 +22,6 @@ export function App({ appConfig }: AppProps) {
   const room = useMemo(() => new Room(), []);
   const [sessionStarted, setSessionStarted] = useState(false);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   useEffect(() => {
     const onDisconnected = () => {
@@ -92,7 +89,6 @@ export function App({ appConfig }: AppProps) {
       <RoomContext.Provider value={room}>
         <RoomAudioRenderer />
         {/* <StartAudio label="Start Audio" /> */}
-        {/* --- */}
         <div className="flex flex-row">
           <div className="relative flex-1">
             <MotionSessionView
@@ -108,29 +104,6 @@ export function App({ appConfig }: AppProps) {
                 delay: sessionStarted ? 0.5 : 0,
               }}
             />
-          </div>
-          <div>
-            {!sidebarOpen && (
-              <div className="cursor-pointer p-4" onClick={() => setSidebarOpen(true)}>
-                <Settings />
-              </div>
-            )}
-            {sidebarOpen && sessionStarted && (
-              <div className="bg-background relative z-50 flex h-screen w-screen flex-col md:w-[400px]">
-                <div className="flex h-[50px] w-full items-center justify-end pr-3 md:hidden">
-                  <button
-                    onClick={() => setSidebarOpen(false)}
-                    className="h-6 w-6 cursor-pointer rounded-4xl hover:bg-gray-100 hover:text-gray-500"
-                    aria-label="Close sidebar"
-                  >
-                    <X className="h-5" />
-                  </button>
-                </div>
-                <div className="h-[calc(100vh-50px)] overflow-auto">
-                  <AISettingsPanel />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </RoomContext.Provider>
