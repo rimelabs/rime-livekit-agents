@@ -20,6 +20,7 @@ from livekit.plugins import (
     noise_cancellation,
     rime,
     silero,
+    deepgram,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from sentence_tokenizer import ArcanaSentenceTokenizer
