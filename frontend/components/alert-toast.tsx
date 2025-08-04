@@ -22,7 +22,10 @@ function AlertToast(props: ToastProps) {
   const { title, description, id } = props;
 
   return (
-    <Alert onClick={() => sonnerToast.dismiss(id)} className="bg-accent">
+    <Alert
+      onClick={() => sonnerToast.dismiss(id)}
+      className="bg-gradient-to-br from-black via-neutral-900 to-black text-white"
+    >
       <WarningIcon weight="bold" />
       <AlertTitle>{title}</AlertTitle>
       {description && <AlertDescription>{description}</AlertDescription>}
