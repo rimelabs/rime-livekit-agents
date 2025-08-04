@@ -24,6 +24,9 @@ from livekit.plugins import (
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from sentence_tokenizer import ArcanaSentenceTokenizer
+from livekit.agents.tokenize import tokenizer
+from agent_configs import VOICE_CONFIGS
+
 
 load_dotenv()
 logger = logging.getLogger("voice-agent")
@@ -40,11 +43,7 @@ def prewarm(proc: JobProcess):
 
 class RimeAssistant(Agent):
     def __init__(self) -> None:
-        super().__init__(
-            instructions="""
-            You are a helpful voice assistant. Provide clear, direct responses using active voice.
-        """
-        )
+        super().__init__(instructions=VOICE_CONFIGS[VOICE]["llm_prompt"])
 
 
 async def entrypoint(ctx: JobContext):
@@ -52,16 +51,19 @@ async def entrypoint(ctx: JobContext):
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
     await ctx.wait_for_participant()
 
-    rime_tts = rime.TTS(
-        model="mistv2",
-        speaker="hank",
-        speed_alpha=1.1,
-        reduce_latency=True,
-        lang="eng",
-    )
+    rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
     rime_tts = tts.StreamAdapter(
         tts=rime_tts, sentence_tokenizer=ArcanaSentenceTokenizer(min_sentence_len=1000)
     )
+    if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
+        sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
+        if not isinstance(sentence_tokenizer, tokenizer.SentenceTokenizer):
+            raise TypeError(
+                f"Expected sentence_tokenizer to be an instance of tokenizer.SentenceTokenizer, got {type(sentence_tokenizer)}"
+            )
+        rime_tts = tts.StreamAdapter(
+            tts=rime_tts, sentence_tokenizer=sentence_tokenizer
+        )
 
     session = AgentSession(
         stt=deepgram.STT(model="nova-3", language="multi"),
@@ -90,6 +92,7 @@ async def entrypoint(ctx: JobContext):
             noise_cancellation=noise_cancellation.BVC()
         ),
     )
+    await session.say(VOICE_CONFIGS[VOICE]["intro_phrase"])
 
 
 if __name__ == "__main__":
