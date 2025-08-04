@@ -64,7 +64,7 @@ async def entrypoint(ctx: JobContext):
     )
 
     session = AgentSession(
-        stt=openai.STT(),
+        stt=deepgram.STT(model="nova-3", language="multi"),
         llm=openai.LLM(model="gpt-4o-mini"),
         tts=rime_tts,
         vad=ctx.proc.userdata["vad"],
