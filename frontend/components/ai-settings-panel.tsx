@@ -17,13 +17,10 @@ import { Slider } from '@/components/ui/slider';
 import { cn } from '@/lib/utils';
 
 type ModelType = 'arcana' | 'mist';
-type VoiceType = 'prebuilt' | 'custom';
 
 export function AISettingsPanel() {
   const [selectedModel, setSelectedModel] = useState<ModelType>('arcana');
-  const [voiceType, setVoiceType] = useState<VoiceType>('prebuilt');
   const [selectedVoice, setSelectedVoice] = useState('luna');
-  const [customVoiceDescription, setCustomVoiceDescription] = useState('');
   const [temperature, setTemperature] = useState([0.71]);
   const [repetitionPenalty, setRepetitionPenalty] = useState([1.5]);
   const [topP, setTopP] = useState([1.0]);
