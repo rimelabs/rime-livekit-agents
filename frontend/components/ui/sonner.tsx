@@ -19,7 +19,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          '--normal-bg': 'linear-gradient(to right, black, rgb(115 115 115))',
+          '--normal-bg': 'rgb(115 115 115)',
           '--normal-text': 'var(--popover-foreground)',
           '--normal-border': 'var(--border)',
         } as React.CSSProperties
