@@ -62,3 +62,100 @@ OPENAI_API_KEY=<your_openai_api_key>
 
 Make sure to keep your API keys secure and never share them publicly.
 
+## Clone the Repository
+
+First, clone this repository to your local machine:
+
+```sh
+git clone https://github.com/rimelabs/rime-livekit-agents.git
+# or
+git clone git@github.com:rimelabs/rime-livekit-agents.git
+cd rime-livekit-agents
+```
+
+## Frontend Setup
+
+To set up and run the frontend application:
+
+1. **Navigate to the frontend directory:**
+   ```sh
+   cd frontend
+   ```
+
+2. **Create your environment file:**
+   ```sh
+   touch .env
+   # Add the following keys to your .env file:
+   LIVEKIT_API_KEY=<your_api_key>
+   LIVEKIT_API_SECRET=<your_api_secret>
+   LIVEKIT_URL=wss://<project-subdomain>.livekit.cloud
+   ```
+   Replace the placeholders with your actual LiveKit credentials.
+
+3. **Install dependencies:**
+   ```sh
+   pnpm install
+   ```
+
+4. **Start the frontend development server:**
+   ```sh
+   pnpm run dev
+   ```
+
+The frontend should now be running locally and ready to connect to your LiveKit backend.
+
+## Backend Setup
+
+Follow these steps to set up and run the backend agent:
+
+1. **Navigate to the backend directory:**
+   ```sh
+   cd backend
+   ```
+
+2. **Create and activate a Python virtual environment:**
+   ```sh
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
+3. **Install dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+4. **Download required model files:**
+   ```sh
+   python rime_agent.py download-files
+   ```
+
+5. **Create your environment file:**
+   ```sh
+   touch .env
+   # Add the following keys to your .env file:
+   LIVEKIT_URL=<your LiveKit server URL>
+   LIVEKIT_API_KEY=<your API Key>
+   LIVEKIT_API_SECRET=<your API Secret>
+   OPENAI_API_KEY=<your OpenAI API Key>
+   RIME_API_KEY=<your Rime API Key>
+   DEEPGRAM_API_KEY=<your Deepgram API Key>
+   ```
+   Replace the placeholders with your actual API credentials.
+
+6. **Run the agent in different modes:**
+
+   - **Development mode (connects to LiveKit, for use with the frontend UI):**
+     ```sh
+     python rime_agent.py dev
+     ```
+   - **Console mode (test directly from the terminal):**
+     ```sh
+     python rime_agent.py console
+     ```
+   - **Production mode (for deployment):**
+     ```sh
+     python rime_agent.py start
+     ```
+
+For more details on running and testing your agent, see the [LiveKit Voice AI Quickstart](https://docs.livekit.io/agents/start/voice-ai/#speak-to-your-agent).
+
