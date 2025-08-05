@@ -33,3 +33,32 @@ flowchart TD
     L --> U
 ```
 
+## Setup: Required API Keys
+
+Before setting up the project, you need to obtain API keys for all required services and add them to a `.env` file in the project root. These keys are necessary to connect to LiveKit rooms and enable speech-to-text (STT), large language model (LLM), and other AI features.
+
+Add the following keys to your respective `.env` file:
+
+```
+LIVEKIT_API_KEY=<your_api_key>
+LIVEKIT_API_SECRET=<your_api_secret>
+LIVEKIT_URL=wss://<project-subdomain>.livekit.cloud
+RIME_API_KEY=<your_rime_api_key>
+DEEPGRAM_API_KEY=<your_deepgram_api_key>
+OPENAI_API_KEY=<your_openai_api_key>
+```
+
+### How to Obtain the Keys
+
+- **LiveKit API Keys:**
+  - Sign up or log in at [LiveKit Cloud](https://cloud.livekit.io/login)
+  - Go to Settings → API Keys to generate your API key, secret, and get your project URL.
+- **RIME_API_KEY:**
+  - Obtain from your Rime account at [Rime Tokens](https://app.rime.ai/tokens/).
+- **Deepgram API Key:**
+  - Sign up or log in at [Deepgram Console](https://console.deepgram.com/project/b10a1314-1443-4796-811f-f099e5da682e) to generate your API key.
+- **OpenAI API Key:**
+  - Sign up or log in at [OpenAI Platform](https://platform.openai.com/settings/organization/api-keys) to generate your API key.
+
+Make sure to keep your API keys secure and never share them publicly.
+
