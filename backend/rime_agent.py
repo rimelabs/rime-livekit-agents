@@ -52,9 +52,6 @@ async def entrypoint(ctx: JobContext):
     await ctx.wait_for_participant()
 
     rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
-    rime_tts = tts.StreamAdapter(
-        tts=rime_tts, sentence_tokenizer=ArcanaSentenceTokenizer(min_sentence_len=1000)
-    )
     if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
         sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
         if not isinstance(sentence_tokenizer, tokenizer.SentenceTokenizer):
