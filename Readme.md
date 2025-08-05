@@ -6,6 +6,14 @@ The core demonstration includes setting up a pipeline with SST (speech-to-text),
 
 This repository serves as an example and starting point for integrating real-time conversational AI experiences using LiveKit, making it easy for users to adapt the setup to their own needs.
 
+<p align="center">
+  <img src="frontend/public/rime-black.svg" alt="Rime Logo" height="60"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <b style="font-size:2em;">+</b>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="frontend/public/lk-logo.svg" alt="LiveKit Logo" height="60"/>
+</p>
+
 ## Before You Start
 
 If this is your first time working with LiveKit, we highly recommend spending some time reviewing the official documentation to understand the platform and its capabilities:
