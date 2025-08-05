@@ -23,15 +23,6 @@ Familiarizing yourself with these resources will give you a strong foundation fo
 The following diagram illustrates the high-level architecture of this project:
 
 ```mermaid
-flowchart LR
-    A["Frontend App"] <--> B["LiveKit Room"] <--> C["Voice Agent"] <--> D["AI Services\n(STT → LLM → TTS)"]
-```
-
-### Detailed Flow
-
-Alternatively, here is a more detailed flow of the interaction:
-
-```mermaid
 flowchart TD
     U["👤 User<br/>(speaks)"] --> L["🏠 LiveKit Room<br/>(real-time audio)"]
     L --> V["🤖 Voice Agent<br/>(listens & responds)"]
