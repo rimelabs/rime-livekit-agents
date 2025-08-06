@@ -146,6 +146,7 @@ def save_config(config: dict) -> None:
     """Save configuration to file"""
     script_dir = os.path.dirname(os.path.abspath(__file__))
     config_path = os.path.join(script_dir, CONFIG_FILE)
+    print_colored(f"Saving config to: {config_path}", Colors.BLUE)
     with open(config_path, "w") as f:
         json.dump(config, f, indent=4)
 
@@ -269,7 +270,7 @@ def main():
             start_servers(frontend_name, agent_script_dir, activate_script)
             return
         elif choice == "2":
-            # Clean up existing directories
+            # Clean up existing directories and config
             print_colored("\nCleaning up existing installation...", Colors.BLUE)
             if os.path.exists(frontend_dir):
                 shutil.rmtree(frontend_dir)
@@ -277,6 +278,11 @@ def main():
             if os.path.exists(venv_path):
                 shutil.rmtree(venv_path)
                 print_colored(f"Removed {venv_path}", Colors.GREEN)
+            # Remove config file
+            config_path = os.path.join(script_dir, CONFIG_FILE)
+            if os.path.exists(config_path):
+                os.remove(config_path)
+                print_colored(f"Removed {CONFIG_FILE}", Colors.GREEN)
         elif choice == "3":
             sys.exit(0)
         # invalid choice continues with full setup
