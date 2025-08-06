@@ -107,7 +107,7 @@ def setup_frontend_files(frontend_name: str) -> None:
 
     # Replace app-config.ts
     frontend_config_path = os.path.join(frontend_name, "app-config.ts")
-    info_config_path = os.path.join(script_dir, "info", "app-config.ts")
+    assets_config_path = os.path.join(script_dir, "assets", "app-config.ts")
 
     try:
         # Delete existing app-config.ts if it exists
@@ -116,12 +116,12 @@ def setup_frontend_files(frontend_name: str) -> None:
             print_colored("Removed existing app-config.ts", Colors.BLUE)
 
         # Copy new app-config.ts
-        shutil.copy2(info_config_path, frontend_config_path)
+        shutil.copy2(assets_config_path, frontend_config_path)
         print_colored("Copied new app-config.ts to frontend", Colors.GREEN)
 
         # Clean public folder and copy images
         public_dir = os.path.join(frontend_name, "public")
-        info_images_dir = os.path.join(script_dir, "info")
+        assets_dir = os.path.join(script_dir, "assets")
 
         # Clean existing images in public folder
         for item in os.listdir(public_dir):
@@ -130,10 +130,10 @@ def setup_frontend_files(frontend_name: str) -> None:
         print_colored("Cleaned existing images from public folder", Colors.BLUE)
 
         # Copy new images
-        for item in os.listdir(info_images_dir):
+        for item in os.listdir(assets_dir):
             if item.endswith((".svg", ".png", ".jpg", ".ico")):
                 shutil.copy2(
-                    os.path.join(info_images_dir, item), os.path.join(public_dir, item)
+                    os.path.join(assets_dir, item), os.path.join(public_dir, item)
                 )
         print_colored("Copied new images to public folder", Colors.GREEN)
 
