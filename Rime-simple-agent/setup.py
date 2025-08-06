@@ -223,6 +223,8 @@ def start_servers(frontend_name: str, agent_script_path: str, venv_activate: str
         "\nBoth services are now running! Press Ctrl+C to stop both servers.",
         Colors.GREEN,
     )
+    print_colored("\nOpen your browser and navigate to:", Colors.BLUE)
+    print_colored("http://localhost:3000", Colors.GREEN)
 
     try:
         # Keep the main process running and handle Ctrl+C
