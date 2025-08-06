@@ -10,10 +10,17 @@
 .venv/
 venv/
 
+# Frontend directory (when created by setup script)
+/frontend/
+/Rime-simple-agent/frontend/
+
 # Environment Variables
 .env*
 !.env.example
 .env.local
+
+# Configuration files
+rime_config.json
 .env.dev
 .env.prod
 
