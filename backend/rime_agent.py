@@ -20,7 +20,6 @@ from livekit.plugins import (
     noise_cancellation,
     rime,
     silero,
-    deepgram,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from sentence_tokenizer import ArcanaSentenceTokenizer
@@ -63,7 +62,7 @@ async def entrypoint(ctx: JobContext):
         )
 
     session = AgentSession(
-        stt=deepgram.STT(model="nova-3", language="multi"),
+        stt=openai.STT(),
         llm=openai.LLM(model="gpt-4o-mini"),
         tts=rime_tts,
         vad=ctx.proc.userdata["vad"],

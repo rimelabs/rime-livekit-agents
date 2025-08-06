@@ -31,7 +31,6 @@ livekit==1.0.7
 livekit-agents==1.0.20
 livekit-api==1.0.2
 livekit-plugins-cartesia==1.0.20
-livekit-plugins-deepgram==1.0.20
 livekit-plugins-noise-cancellation==0.2.1
 livekit-plugins-openai==1.0.20
 livekit-plugins-rime @ git+https://github.com/rimelabs/livekit-agents.git@bddcc0d265176bb6b3a6b32d6773e7980e08790c#subdirectory=livekit-plugins/livekit-plugins-rime
