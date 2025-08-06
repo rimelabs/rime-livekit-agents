@@ -11,7 +11,7 @@ import { SessionView } from '@/components/session-view';
 import { Toaster } from '@/components/ui/sonner';
 import { Welcome } from '@/components/welcome';
 import useConnectionDetails from '@/hooks/useConnectionDetails';
-import type { AppConfig } from '@/lib/types';
+import type { AISettings, AgentType, AppConfig } from '@/lib/types';
 
 const MotionWelcome = motion.create(Welcome);
 const MotionSessionView = motion.create(SessionView);
@@ -25,6 +25,21 @@ export function App({ appConfig }: AppProps) {
   const [sessionStarted, setSessionStarted] = useState(false);
   const { connectionDetails, refreshConnectionDetails } = useConnectionDetails();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [aiSettings, setAISettings] = useState<AISettings>({
+    model: 'arcana',
+    arcanaSettings: {
+      voice: 'luna',
+      temperature: 0.71,
+      repetitionPenalty: 1.5,
+      topP: 1.0,
+    },
+    mistv2Settings: {
+      voice: 'harry',
+      speed: 1,
+    },
+  });
+  const [selectedAgent, setSelectedAgent] = useState<AgentType>('general');
+  console.log(aiSettings);
 
   useEffect(() => {
     const onDisconnected = () => {
@@ -127,7 +142,12 @@ export function App({ appConfig }: AppProps) {
                   </button>
                 </div>
                 <div className="h-[calc(100vh-50px)] overflow-auto">
-                  <AISettingsPanel />
+                  <AISettingsPanel
+                    aiSettings={aiSettings}
+                    setAISettings={setAISettings}
+                    selectedAgent={selectedAgent}
+                    setSelectedAgent={setSelectedAgent}
+                  />
                 </div>
               </div>
             )}

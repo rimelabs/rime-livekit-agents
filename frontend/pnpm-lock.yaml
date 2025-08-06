@@ -53,6 +53,12 @@ importers:
       livekit-server-sdk:
         specifier: ^2.13.0
         version: 2.13.1
+      lucide:
+        specifier: ^0.536.0
+        version: 0.536.0
+      lucide-react:
+        specifier: ^0.536.0
+        version: 0.536.0(react@19.1.1)
       mime:
         specifier: ^4.0.7
         version: 4.0.7
@@ -66,7 +72,7 @@ importers:
         specifier: ^0.4.6
         version: 0.4.6(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react:
-        specifier: ^19.0.0
+        specifier: ^19.1.1
         version: 19.1.1
       react-dom:
         specifier: ^19.0.0
@@ -2028,6 +2034,14 @@ packages:
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
     hasBin: true
+
+  lucide-react@0.536.0:
+    resolution: {integrity: sha512-2PgvNa9v+qz4Jt/ni8vPLt4jwoFybXHuubQT8fv4iCW5TjDxkbZjNZZHa485ad73NSEn/jdsEtU57eE1g+ma8A==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0
+
+  lucide@0.536.0:
+    resolution: {integrity: sha512-BmwmMcTpPcyW2fsF8psFg+/5/xQkSvJ7eSt223hzUSmITfxhfEc7gg16ivWz97cAPMzVSmhkQ2Uj5kN2xOnUeQ==}
 
   magic-string@0.30.17:
     resolution: {integrity: sha512-sNPKHvyjVf7gyjwS4xGTaW/mCnF8wnjtifKBEhxfZ7E/S8tQ0rssrwGNn6q8JH/ohItJfSQp9mBtQYuTlH5QnA==}
@@ -4651,6 +4665,12 @@ snapshots:
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
+
+  lucide-react@0.536.0(react@19.1.1):
+    dependencies:
+      react: 19.1.1
+
+  lucide@0.536.0: {}
 
   magic-string@0.30.17:
     dependencies:
