@@ -13,6 +13,11 @@ import shutil
 from pathlib import Path
 import platform
 import venv
+import json
+import datetime
+
+
+CONFIG_FILE = "rime_config.json"
 
 
 class Colors:
@@ -65,7 +70,13 @@ def create_env_file(path: str, variables: dict) -> None:
 def setup_virtual_env(path: str) -> str:
     """Create and activate virtual environment"""
     venv_path = os.path.join(path, "venv")
-    venv.create(venv_path, with_pip=True)
+
+    # Remove existing venv if it exists
+    if os.path.exists(venv_path):
+        shutil.rmtree(venv_path)
+
+    # Create new venv using python -m venv
+    subprocess.run([sys.executable, "-m", "venv", venv_path], check=True)
 
     # Get the activate script path based on OS
     if platform.system() == "Windows":
@@ -131,8 +142,143 @@ def setup_frontend_files(frontend_name: str) -> None:
         sys.exit(1)
 
 
+def save_config(config: dict) -> None:
+    """Save configuration to file"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, CONFIG_FILE)
+    with open(config_path, "w") as f:
+        json.dump(config, f, indent=4)
+
+
+def load_config() -> dict:
+    """Load configuration from file"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    config_path = os.path.join(script_dir, CONFIG_FILE)
+    if os.path.exists(config_path):
+        try:
+            with open(config_path, "r") as f:
+                return json.load(f)
+        except json.JSONDecodeError:
+            return {}
+    return {}
+
+
+def is_port_in_use(port: int) -> bool:
+    """Check if a port is in use"""
+    import socket
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        return s.connect_ex(("localhost", port)) == 0
+
+
+def start_servers(frontend_name: str, agent_script_path: str, venv_activate: str):
+    """Start both frontend and backend servers"""
+    # Check if servers are already running
+    if is_port_in_use(3000):  # Default Next.js port
+        print_colored(
+            "Frontend server is already running on port 3000!", Colors.WARNING
+        )
+        return
+
+    print_colored("\n=== Starting Rime LiveKit Agent Services ===", Colors.HEADER)
+
+    # Start frontend server
+    print_colored("\n1. Starting frontend server...", Colors.BLUE)
+    try:
+        # Start frontend in background
+        frontend_process = subprocess.Popen(
+            ["pnpm", "run", "dev"],
+            cwd=frontend_name,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        print_colored("Frontend server started successfully!", Colors.GREEN)
+    except subprocess.CalledProcessError as e:
+        print_colored(f"Error starting frontend server: {e}", Colors.FAIL)
+        sys.exit(1)
+
+    # Start backend server
+    print_colored("\n2. Starting agent-script server...", Colors.BLUE)
+    try:
+        if platform.system() == "Windows":
+            backend_process = subprocess.Popen(
+                [f"{venv_activate} && python rime_agent.py dev"],
+                cwd=agent_script_path,
+                shell=True,
+            )
+        else:
+            backend_process = subprocess.Popen(
+                f"source {venv_activate} && python rime_agent.py dev",
+                cwd=agent_script_path,
+                shell=True,
+                executable="/bin/bash",
+            )
+        print_colored("Agent-script server started successfully!", Colors.GREEN)
+    except Exception as e:
+        print_colored(f"Error starting agent-script server: {e}", Colors.FAIL)
+        frontend_process.terminate()
+        sys.exit(1)
+
+    print_colored(
+        "\nBoth services are now running! Press Ctrl+C to stop both servers.",
+        Colors.GREEN,
+    )
+
+    try:
+        # Keep the main process running and handle Ctrl+C
+        frontend_process.wait()
+    except KeyboardInterrupt:
+        print_colored("\nShutting down servers...", Colors.WARNING)
+        frontend_process.terminate()
+        backend_process.terminate()
+        print_colored("Servers stopped successfully!", Colors.GREEN)
+
+
 def main():
-    print_colored("\n=== Rime LiveKit Agent Setup ===", Colors.HEADER)
+    print_colored("\n=== Rime LiveKit Agent ===", Colors.HEADER)
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    agent_script_dir = os.path.join(script_dir, "agent-script")
+    venv_path = os.path.join(agent_script_dir, "venv")
+
+    # Load existing configuration
+    config = load_config()
+    frontend_name = config.get("frontend_name", "frontend")
+    frontend_dir = os.path.join(script_dir, frontend_name)
+
+    # Check if setup is already done
+    if os.path.exists(frontend_dir) and os.path.exists(venv_path):
+        print_colored(
+            "Setup already completed. What would you like to do?", Colors.BLUE
+        )
+        print("1. Start servers")
+        print("2. Reinstall everything")
+        print("3. Exit")
+
+        choice = input("\nEnter your choice (1-3): ").strip()
+
+        if choice == "1":
+            # Get the activate script path
+            if platform.system() == "Windows":
+                activate_script = os.path.join(venv_path, "Scripts", "activate.bat")
+            else:
+                activate_script = os.path.join(venv_path, "bin", "activate")
+
+            start_servers(frontend_name, agent_script_dir, activate_script)
+            return
+        elif choice == "2":
+            # Clean up existing directories
+            print_colored("\nCleaning up existing installation...", Colors.BLUE)
+            if os.path.exists(frontend_dir):
+                shutil.rmtree(frontend_dir)
+                print_colored(f"Removed {frontend_dir}", Colors.GREEN)
+            if os.path.exists(venv_path):
+                shutil.rmtree(venv_path)
+                print_colored(f"Removed {venv_path}", Colors.GREEN)
+        elif choice == "3":
+            sys.exit(0)
+        # invalid choice continues with full setup
+
     print_colored(
         "This script will set up both the frontend and agent components.", Colors.BLUE
     )
@@ -154,6 +300,13 @@ def main():
     # Get frontend folder name
     frontend_name = get_user_input("Enter the frontend folder name", "frontend")
     print_colored(f"\nUsing frontend folder name: {frontend_name}", Colors.GREEN)
+
+    # Save configuration
+    config = {
+        "frontend_name": frontend_name,
+        "setup_date": str(datetime.datetime.now()),
+    }
+    save_config(config)
 
     # Clone the repository
     print_colored("\nCloning the agent-starter-react repository...", Colors.BLUE)
@@ -242,28 +395,16 @@ def main():
             executable="/bin/bash",
         )
 
+    # Install frontend dependencies if needed
+    print_colored("\nInstalling frontend dependencies...", Colors.BLUE)
+    try:
+        subprocess.run(["pnpm", "install"], cwd=frontend_name, check=True)
+    except subprocess.CalledProcessError as e:
+        print_colored(f"Error installing frontend dependencies: {e}", Colors.FAIL)
+        sys.exit(1)
+
     # Start the services
-    print_colored("\n=== Rime LiveKit Agent Setup Complete! ===", Colors.HEADER)
-    print_colored("\nTo start the services:", Colors.BLUE)
-    print("\n1. Start the agent-script:")
-    if platform.system() == "Windows":
-        print(f"cd {agent_script_path}")
-        print(f"{venv_activate}")
-        print("python rime_agent.py dev")
-    else:
-        print(f"cd {agent_script_path}")
-        print(f"source {venv_activate}")
-        print("python rime_agent.py dev")
-
-    print("\n2. In a new terminal, start the frontend:")
-    print(f"cd {frontend_name}")
-    print("pnpm install")
-    print("pnpm dev")
-
-    print_colored(
-        "\nNote: Keep both services running for the application to work properly.",
-        Colors.WARNING,
-    )
+    start_servers(frontend_name, agent_script_path, venv_activate)
 
 
 if __name__ == "__main__":
