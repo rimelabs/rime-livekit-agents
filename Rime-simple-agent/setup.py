@@ -5,14 +5,13 @@ This script sets up both the frontend and agent components of the Rime LiveKit A
 It handles repository cloning, environment setup, and dependency installation.
 """
 
+import argparse
 import os
 import subprocess
 import sys
 from typing import Optional
 import shutil
-from pathlib import Path
 import platform
-import venv
 import json
 import datetime
 
@@ -437,8 +436,6 @@ def start_console_mode(agent_script_dir: str, venv_activate: str):
 
 def main():
     """Main entry point with argument handling"""
-    import argparse
-
     parser = argparse.ArgumentParser(
         description="Rime LiveKit Agent Setup and Management"
     )
@@ -446,6 +443,7 @@ def main():
         "mode",
         nargs="?",
         choices=["dev", "console"],
+        default="dev",
         help="Run mode: 'dev' for full development setup, 'console' for agent-only",
     )
     parser.add_argument(
