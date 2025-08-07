@@ -422,7 +422,8 @@ def start_console_mode(agent_script_dir: str, venv_activate: str):
                 executable="/bin/bash",
             )
         print_colored(
-            "Agent started in console mode. Press Ctrl+C to stop.", Colors.GREEN
+            "Starting agent in console mode... (This may take a few seconds. Press Ctrl+C to stop when ready)",
+            Colors.GREEN,
         )
         try:
             process.wait()
