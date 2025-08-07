@@ -237,70 +237,58 @@ def start_servers(frontend_name: str, agent_script_path: str, venv_activate: str
         print_colored("Servers stopped successfully!", Colors.GREEN)
 
 
-def main():
-    print_colored("\n=== Rime LiveKit Agent ===", Colors.HEADER)
-
+def perform_reset():
+    """Reset the installation by removing all created files and directories"""
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    agent_script_dir = os.path.join(script_dir, "agent-script")
-    venv_path = os.path.join(agent_script_dir, "venv")
-
-    # Load existing configuration
     config = load_config()
     frontend_name = config.get("frontend_name", "frontend")
     frontend_dir = os.path.join(script_dir, frontend_name)
+    agent_script_dir = os.path.join(script_dir, "agent-script")
+    venv_path = os.path.join(agent_script_dir, "venv")
 
-    # Check if setup is already done
-    if os.path.exists(frontend_dir) and os.path.exists(venv_path):
-        print_colored(
-            "Setup already completed. What would you like to do?", Colors.BLUE
-        )
-        print("1. Start servers")
-        print("2. Reinstall everything")
-        print("3. Exit")
+    print_colored("\nResetting installation...", Colors.BLUE)
 
-        choice = input("\nEnter your choice (1-3): ").strip()
+    # Remove frontend directory
+    if os.path.exists(frontend_dir):
+        shutil.rmtree(frontend_dir)
+        print_colored(f"Removed {frontend_dir}", Colors.GREEN)
 
-        if choice == "1":
-            # Get the activate script path
-            if platform.system() == "Windows":
-                activate_script = os.path.join(venv_path, "Scripts", "activate.bat")
-            else:
-                activate_script = os.path.join(venv_path, "bin", "activate")
+    # Remove venv
+    if os.path.exists(venv_path):
+        shutil.rmtree(venv_path)
+        print_colored(f"Removed {venv_path}", Colors.GREEN)
 
-            start_servers(frontend_name, agent_script_dir, activate_script)
-            return
-        elif choice == "2":
-            # Clean up existing directories and config
-            print_colored("\nCleaning up existing installation...", Colors.BLUE)
-            if os.path.exists(frontend_dir):
-                shutil.rmtree(frontend_dir)
-                print_colored(f"Removed {frontend_dir}", Colors.GREEN)
-            if os.path.exists(venv_path):
-                shutil.rmtree(venv_path)
-                print_colored(f"Removed {venv_path}", Colors.GREEN)
-            # Remove config file
-            config_path = os.path.join(script_dir, CONFIG_FILE)
-            if os.path.exists(config_path):
-                os.remove(config_path)
-                print_colored(f"Removed {CONFIG_FILE}", Colors.GREEN)
-        elif choice == "3":
-            sys.exit(0)
-        # invalid choice continues with full setup
+    # Remove env files
+    agent_env_path = os.path.join(agent_script_dir, ".env")
+    if os.path.exists(agent_env_path):
+        os.remove(agent_env_path)
+        print_colored(f"Removed {agent_env_path}", Colors.GREEN)
 
-    print_colored(
-        "This script will set up both the frontend and agent components.", Colors.BLUE
-    )
+    # Remove config file
+    config_path = os.path.join(script_dir, CONFIG_FILE)
+    if os.path.exists(config_path):
+        os.remove(config_path)
+        print_colored(f"Removed {CONFIG_FILE}", Colors.GREEN)
+
+    print_colored("Reset completed successfully!", Colors.GREEN)
+
+
+def perform_installation():
+    """Handle first-time installation flow - same for both dev and console modes"""
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    agent_script_dir = os.path.join(script_dir, "agent-script")
 
     # Check Python version
     if sys.version_info < (3, 8):
         print_colored("Error: Python 3.8 or higher is required", Colors.FAIL)
         sys.exit(1)
 
-    # Check and ask about pnpm
+    # Check pnpm
     if not check_pnpm():
         print_colored("\nError: pnpm is not installed!", Colors.FAIL)
         print_colored(
-            "Please install pnpm first. You can install it using npm:", Colors.WARNING
+            "Please install pnpm first. You can install it using npm:",
+            Colors.WARNING,
         )
         print("npm install -g pnpm")
         sys.exit(1)
@@ -309,10 +297,11 @@ def main():
     frontend_name = get_user_input("Enter the frontend folder name", "frontend")
     print_colored(f"\nUsing frontend folder name: {frontend_name}", Colors.GREEN)
 
-    # Save configuration
+    # Save initial configuration
     config = {
         "frontend_name": frontend_name,
         "setup_date": str(datetime.datetime.now()),
+        "installation_complete": False,
     }
     save_config(config)
 
@@ -332,6 +321,8 @@ def main():
             ],
             check=True,
         )
+        config["repo_cloned"] = True
+        save_config(config)
     except subprocess.CalledProcessError as e:
         print_colored(f"Error cloning repository: {e}", Colors.FAIL)
         sys.exit(1)
@@ -344,8 +335,6 @@ def main():
     print_colored(
         "\nPlease provide the following environment variables:", Colors.HEADER
     )
-
-    # Common variables for both frontend and agent-script
     env_vars = {
         "LIVEKIT_URL": get_user_input("LIVEKIT_URL (your LiveKit server URL)"),
         "LIVEKIT_API_KEY": get_user_input("LIVEKIT_API_KEY"),
@@ -354,7 +343,6 @@ def main():
         "RIME_API_KEY": get_user_input("RIME_API_KEY"),
     }
 
-    # Validate environment variables
     if not validate_env_vars(env_vars):
         sys.exit(1)
 
@@ -376,34 +364,34 @@ def main():
         "OPENAI_API_KEY": env_vars["OPENAI_API_KEY"],
         "RIME_API_KEY": env_vars["RIME_API_KEY"],
     }
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-    agent_script_env_path = os.path.join(script_dir, "agent-script", ".env")
+    agent_script_env_path = os.path.join(agent_script_dir, ".env")
     create_env_file(agent_script_env_path, agent_script_env)
     print_colored(
         f"Created agent-script .env file at: {agent_script_env_path}", Colors.GREEN
     )
+    config["env_setup_complete"] = True
+    save_config(config)
 
-    # Setup agent-script virtual environment
+    # Setup virtual environment and install dependencies
     print_colored("\nSetting up agent-script virtual environment...", Colors.BLUE)
-    agent_script_path = os.path.join(script_dir, "agent-script")
-    venv_activate = setup_virtual_env(agent_script_path)
+    venv_activate = setup_virtual_env(agent_script_dir)
 
-    # Install agent-script dependencies
+    # Install agent dependencies
     print_colored("\nInstalling agent-script dependencies...", Colors.BLUE)
     pip_cmd = "pip install -r requirements.txt"
     if platform.system() == "Windows":
         subprocess.run(
-            f"{venv_activate} && {pip_cmd}", shell=True, cwd=agent_script_path
+            f"{venv_activate} && {pip_cmd}", shell=True, cwd=agent_script_dir
         )
     else:
         subprocess.run(
             f"source {venv_activate} && {pip_cmd}",
             shell=True,
-            cwd=agent_script_path,
+            cwd=agent_script_dir,
             executable="/bin/bash",
         )
 
-    # Install frontend dependencies if needed
+    # Install frontend dependencies
     print_colored("\nInstalling frontend dependencies...", Colors.BLUE)
     try:
         subprocess.run(["pnpm", "install"], cwd=frontend_name, check=True)
@@ -411,8 +399,109 @@ def main():
         print_colored(f"Error installing frontend dependencies: {e}", Colors.FAIL)
         sys.exit(1)
 
-    # Start the services
-    start_servers(frontend_name, agent_script_path, venv_activate)
+    config["installation_complete"] = True
+    save_config(config)
+    print_colored("\nInstallation completed successfully!", Colors.GREEN)
+    return frontend_name, agent_script_dir, venv_activate
+
+
+def start_console_mode(agent_script_dir: str, venv_activate: str):
+    """Start the agent in console mode"""
+    print_colored("\nStarting agent in console mode...", Colors.BLUE)
+    try:
+        if platform.system() == "Windows":
+            process = subprocess.Popen(
+                [f"{venv_activate} && python rime_agent.py console"],
+                cwd=agent_script_dir,
+                shell=True,
+            )
+        else:
+            process = subprocess.Popen(
+                f"source {venv_activate} && python rime_agent.py console",
+                cwd=agent_script_dir,
+                shell=True,
+                executable="/bin/bash",
+            )
+        print_colored(
+            "Agent started in console mode. Press Ctrl+C to stop.", Colors.GREEN
+        )
+        try:
+            process.wait()
+        except KeyboardInterrupt:
+            process.terminate()
+            print_colored("\nAgent stopped.", Colors.WARNING)
+    except Exception as e:
+        print_colored(f"Error starting agent: {e}", Colors.FAIL)
+        sys.exit(1)
+
+
+def main():
+    """Main entry point with argument handling"""
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Rime LiveKit Agent Setup and Management"
+    )
+    parser.add_argument(
+        "mode",
+        nargs="?",
+        choices=["dev", "console"],
+        help="Run mode: 'dev' for full development setup, 'console' for agent-only",
+    )
+    parser.add_argument(
+        "--reset",
+        action="store_true",
+        help="Clean up the installation without reinstalling",
+    )
+    parser.add_argument(
+        "--restart",
+        action="store_true",
+        help="Reset and immediately start fresh installation",
+    )
+    args = parser.parse_args()
+
+    print_colored("\n=== Rime LiveKit Agent ===", Colors.HEADER)
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    if args.reset or args.restart:
+        perform_reset()
+        if args.reset:
+            return
+        # For restart, continue with installation
+        installation_complete = False
+    else:
+        config = load_config()
+        installation_complete = config.get("installation_complete", False)
+
+    # Handle installation if needed
+    if not installation_complete:
+        frontend_name, agent_script_dir, venv_activate = perform_installation()
+    else:
+        # Load existing configuration
+        config = load_config()
+        frontend_name = config.get("frontend_name", "frontend")
+        agent_script_dir = os.path.join(script_dir, "agent-script")
+        venv_path = os.path.join(agent_script_dir, "venv")
+        if platform.system() == "Windows":
+            venv_activate = os.path.join(venv_path, "Scripts", "activate.bat")
+        else:
+            venv_activate = os.path.join(venv_path, "bin", "activate")
+
+    # After installation, check what mode to run
+    if not args.mode:
+        print_colored(
+            "\nInstallation complete! Now specify a mode to run:", Colors.GREEN
+        )
+        print_colored("  python setup.py dev     # Run frontend + backend", Colors.BLUE)
+        print_colored("  python setup.py console # Run backend only", Colors.BLUE)
+        sys.exit(0)
+
+    # Start the appropriate mode
+    if args.mode == "dev":
+        start_servers(frontend_name, agent_script_dir, venv_activate)
+    else:  # console mode
+        start_console_mode(agent_script_dir, venv_activate)
 
 
 if __name__ == "__main__":
