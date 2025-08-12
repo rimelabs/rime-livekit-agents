@@ -147,15 +147,6 @@ The script also provides maintenance options:
   - Resets and immediately starts a fresh installation
   - Helpful when you want to reconfigure everything
 
-#### What the Setup Script Handles
-
-The setup script automates:
-- Repository cloning and configuration
-- Environment file creation
-- Virtual environment setup
-- Dependency installation
-- Frontend and backend server startup
-- API key configuration
 
 Once the setup is complete, both frontend and backend services will start automatically in the selected mode. You can stop the servers at any time by pressing Ctrl+C.
 
