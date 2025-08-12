@@ -62,27 +62,121 @@ OPENAI_API_KEY=<your_openai_api_key>
 
 Make sure to keep your API keys secure and never share them publicly.
 
-## Clone the Repository
+## Installation and Setup
 
-First, clone this repository to your local machine:
+There are two ways to set up this project:
+1. Using the automated setup script (recommended)
+2. Manual setup
 
-```sh
-git clone https://github.com/rimelabs/rime-livekit-agents.git
-# or
-git clone git@github.com:rimelabs/rime-livekit-agents.git
-cd rime-livekit-agents
-```
+### Option 1: Quick Setup Using Setup Script (Recommended)
 
-## Frontend Setup
+We provide a powerful setup script that automates the entire installation process. The script handles both frontend and backend setup, including environment configuration and dependency installation.
 
-To set up and run the frontend application:
+#### Prerequisites
 
-1. **Navigate to the frontend directory:**
+Before running the setup script, ensure you have:
+
+1. **Python 3.9 or higher** installed
+   ```sh
+   # Check your Python version
+   python --version
+   # or
+   python3 --version
+   ```
+   If you need to update Python, visit [python.org/downloads](https://www.python.org/downloads/)
+
+2. **pnpm** package manager installed
+   ```sh
+   # Install pnpm using npm
+   npm install -g pnpm
+   
+   # Verify installation
+   pnpm --version
+   ```
+
+#### Running the Setup Script
+
+1. **Clone the repository:**
+   ```sh
+   git clone https://github.com/rimelabs/rime-livekit-agents.git
+   cd rime-livekit-agents/Rime-simple-agent
+   ```
+
+2. **Run the setup script:**
+   ```sh
+   python setup.py
+   ```
+
+   The script will guide you through the setup process and prompt for:
+   - Frontend folder name (defaults to "frontend")
+   - Required API keys and credentials
+
+#### Available Setup Modes
+
+The setup script supports different modes of operation:
+
+1. **Development Mode (Default):**
+   ```sh
+   python setup.py dev
+   ```
+   - Sets up and runs both frontend and backend servers
+   - Opens a web interface at http://localhost:3000
+
+2. **Console Mode:**
+   ```sh
+   python setup.py console
+   ```
+   - Runs only the backend agent in terminal mode
+   - Useful for testing or command-line interactions
+
+#### Additional Setup Options
+
+The script also provides maintenance options:
+
+- **Reset Installation:**
+  ```sh
+  python setup.py --reset
+  ```
+  - Removes all created files and directories
+  - Useful for cleaning up the installation
+
+- **Restart Installation:**
+  ```sh
+  python setup.py --restart
+  ```
+  - Resets and immediately starts a fresh installation
+  - Helpful when you want to reconfigure everything
+
+#### What the Setup Script Handles
+
+The setup script automates:
+- Repository cloning and configuration
+- Environment file creation
+- Virtual environment setup
+- Dependency installation
+- Frontend and backend server startup
+- API key configuration
+
+Once the setup is complete, both frontend and backend services will start automatically in the selected mode. You can stop the servers at any time by pressing Ctrl+C.
+
+### Option 2: Manual Setup
+
+If you prefer to set up the project manually or need more control over the installation process, follow these steps:
+
+#### Frontend Setup
+
+1. **Clone and navigate to the repository:**
+   ```sh
+   git clone https://github.com/rimelabs/rime-livekit-agents.git
+   cd rime-livekit-agents
+   ```
+
+2. **Navigate to the frontend directory:**
    ```sh
    cd frontend
    ```
 
-2. **Create your environment file:**
+3. **Create your environment file:**
    ```sh
    touch .env
    # Add the following keys to your .env file:
@@ -92,21 +186,19 @@ To set up and run the frontend application:
    ```
    Replace the placeholders with your actual LiveKit credentials.
 
-3. **Install dependencies:**
+4. **Install dependencies:**
    ```sh
    pnpm install
    ```
 
-4. **Start the frontend development server:**
+5. **Start the frontend development server:**
    ```sh
    pnpm run dev
    ```
 
 The frontend should now be running locally and ready to connect to your LiveKit backend.
 
-## Backend Setup
-
-Follow these steps to set up and run the backend agent:
+#### Backend Setup
 
 1. **Navigate to the backend directory:**
    ```sh

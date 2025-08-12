@@ -278,8 +278,8 @@ def perform_installation():
     agent_script_dir = os.path.join(script_dir, "agent-script")
 
     # Check Python version
-    if sys.version_info < (3, 8):
-        print_colored("Error: Python 3.8 or higher is required", Colors.FAIL)
+    if sys.version_info < (3, 9):
+        print_colored("Error: Python 3.9 or higher is required", Colors.FAIL)
         sys.exit(1)
 
     # Check pnpm
