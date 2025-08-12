@@ -156,14 +156,15 @@ If you prefer to set up the project manually or need more control over the insta
 
 #### Frontend Setup
 
-1. **Clone and navigate to the repository:**
+1. **Clone the main repository and navigate to it:**
    ```sh
    git clone https://github.com/rimelabs/rime-livekit-agents.git
    cd rime-livekit-agents
    ```
 
-2. **Navigate to the frontend directory:**
+2. **Clone the frontend repository:**
    ```sh
+   git clone https://github.com/livekit-examples/agent-starter-react.git frontend
    cd frontend
    ```
 
