@@ -22,7 +22,7 @@ from livekit.plugins import (
     silero,
 )
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from sentence_tokenizer import ArcanaSentenceTokenizer
+
 from livekit.agents.tokenize import tokenizer
 from agent_configs import VOICE_CONFIGS
 
@@ -31,7 +31,8 @@ load_dotenv()
 logger = logging.getLogger("voice-agent")
 
 VOICE_NAMES = ["hank", "celeste"]
-# randomly select a voice from the list
+OPENAI_MODEL = "gpt-4o-mini"
+OPENAI_TRANSCRIPT_MODEL = "gpt-4o-transcribe"
 VOICE = random.choice(VOICE_NAMES)
 
 
@@ -41,6 +42,8 @@ def prewarm(proc: JobProcess):
 
 
 class RimeAssistant(Agent):
+    """Voice assistant agent for Rime platform."""
+
     def __init__(self) -> None:
         super().__init__(instructions=VOICE_CONFIGS[VOICE]["llm_prompt"])
 
@@ -63,9 +66,9 @@ async def entrypoint(ctx: JobContext):
 
     session = AgentSession(
         stt=openai.STT(
-            model="gpt-4o-transcribe",
+            model=OPENAI_TRANSCRIPT_MODEL,
         ),
-        llm=openai.LLM(model="gpt-4o-mini"),
+        llm=openai.LLM(model=OPENAI_MODEL),
         tts=rime_tts,
         vad=ctx.proc.userdata["vad"],
         turn_detection=MultilingualModel(),

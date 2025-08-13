@@ -30,10 +30,7 @@ VOICE_CONFIGS = {
         "tts_options": {
             "model": "arcana",
             "speaker": "celeste",
-            "repetition_penalty": 1.5,
             "max_tokens": 3400,
-            "temperature": 0.65,
-            "top_p": 0.95,
         },
         "sentence_tokenizer": ArcanaSentenceTokenizer(min_sentence_len=1000),
         "llm_prompt": """
