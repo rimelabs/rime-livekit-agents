@@ -205,6 +205,10 @@ def start_servers(frontend_name: str, agent_script_path: str, venv_activate: str
                 [f"{venv_activate} && python rime_agent.py dev"],
                 cwd=agent_script_path,
                 shell=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
             )
         else:
             backend_process = subprocess.Popen(
@@ -212,12 +216,45 @@ def start_servers(frontend_name: str, agent_script_path: str, venv_activate: str
                 cwd=agent_script_path,
                 shell=True,
                 executable="/bin/bash",
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                bufsize=1,
             )
-        print_colored("Agent-script server started successfully!", Colors.GREEN)
+
+        # Wait for initialization signal
+        while True:
+            output_line = backend_process.stdout.readline()
+            if not output_line and backend_process.poll() is not None:
+                raise Exception("Backend process terminated before initialization")
+
+            # Check for either initialization signal
+            if (
+                "registered worker" in output_line
+                or "inference process initialized" in output_line
+            ):
+                print_colored("Agent-script server started successfully!", Colors.GREEN)
+                break
+
+            # Echo the output line to keep user informed of progress
+            if output_line.strip():
+                print(output_line.strip())
+
     except Exception as e:
         print_colored(f"Error starting agent-script server: {e}", Colors.FAIL)
         frontend_process.terminate()
         sys.exit(1)
+
+    # Start stderr reader thread to prevent buffer from filling up
+    def read_stderr():
+        for line in backend_process.stderr:
+            if line.strip():
+                print(line.strip(), file=sys.stderr)
+
+    import threading
+
+    stderr_thread = threading.Thread(target=read_stderr, daemon=True)
+    stderr_thread.start()
 
     print_colored(
         "\nBoth services are now running! Press Ctrl+C to stop both servers.",
