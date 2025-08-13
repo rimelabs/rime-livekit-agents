@@ -113,7 +113,18 @@ Before running the setup script, ensure you have:
 
 #### Available Setup Modes
 
-The setup script supports different modes of operation:
+The setup script supports different modes of operation. Here's a visual representation of how each mode works:
+
+```mermaid
+graph TD
+    A[Setup Script] --> B{Mode Selection}
+    B -->|Dev Mode| C[Start Frontend Server]
+    B -->|Console Mode| D[Start Agent Only]
+    C --> E[Start Backend Agent]
+    C --> F[Web UI on port 3000]
+    E --> G[Full Development Environment]
+    D --> H[Terminal-based Agent]
+```
 
 1. **Development Mode (Default):**
    ```sh
