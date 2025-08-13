@@ -427,6 +427,14 @@ def perform_installation():
             executable="/bin/bash",
         )
 
+    # Download LiveKit agent model files
+    print_colored("\nDownloading LiveKit agent model files...", Colors.BLUE)
+    subprocess.run(
+        ["python", "rime_agent.py", "download-files"],
+        cwd=agent_script_dir,
+        check=True,
+    )
+
     # Install frontend dependencies
     print_colored("\nInstalling frontend dependencies...", Colors.BLUE)
     try:
