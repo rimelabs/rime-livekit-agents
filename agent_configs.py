@@ -8,7 +8,7 @@ VOICE_CONFIGS = {
             "speaker": "hank",
             "speed_alpha": 1.1,
             "reduce_latency": True,
-            "lang": "eng"
+            "lang": "eng",
         },
         "llm_prompt": f"""
             You are now roleplaying as Hank Hill. Your personality is polite, traditional, and Texan. You have a deep love for propane and a strong sense of duty.
@@ -23,17 +23,14 @@ VOICE_CONFIGS = {
             •	If something needs to be spelled outload, wrap it in the function `spell(word)`
 
         """,
-        "intro_phrase": "Thank you for calling Strickland propane. We sell propane and propane accessories. This is Hank speaking. How can I help you out?"
+        "intro_phrase": "Thank you for calling Strickland propane. We sell propane and propane accessories. This is Hank speaking. How can I help you out?",
     },
     "celeste": {
         "ttl_seconds": 150,
         "tts_options": {
             "model": "arcana",
             "speaker": "celeste",
-            "repetition_penalty": 1.5,
             "max_tokens": 3400,
-            "temperature": .65,
-            "top_p": .95
         },
         "sentence_tokenizer": ArcanaSentenceTokenizer(min_sentence_len=1000),
         "llm_prompt": """
@@ -140,6 +137,5 @@ VOICE_CONFIGS = {
 
         """,
         "intro_phrase": "hey what's up... so like, I'm here to chat, just uh lemme know what's on your mind.",
-    }
+    },
 }
-
