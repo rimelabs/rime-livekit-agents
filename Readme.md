@@ -4,11 +4,10 @@ This public repository showcases how to run Rime with LiveKit to build real‑ti
 
 ## What this repo contains
 
-- Rime-simple-agent
-  - A minimal end‑to‑end voice agent that wires together speech‑to‑text (STT), a large language model (LLM), and text‑to‑speech (TTS) over LiveKit.
-  - Includes a Python backend (LiveKit Agent) and a Next.js frontend for a simple web UI.
-  - You can run the backend and frontend together (dev mode) or run the backend independently (console mode).
-  - Setup and usage instructions are provided inside the project folder.
+- Rime Simple Agent
+  - A simple example implementation that demonstrates a complete voice conversation pipeline using LiveKit and Rime. It showcases a seamless integration of Speech-to-Text (STT) → Large Language Model (LLM) → Text-to-Speech (TTS) for natural, bidirectional voice conversations.
+  - This is a simple script that serves as a perfect starting point for developers who want to see a basic STT-LLM-TTS implementation and build on top of it.
+  - The code is intentionally kept straightforward and well-documented so you can easily understand, download, and run it as a foundation for your own voice agent implementation.
 
 - Additional example(s)
   - A second, slightly more advanced project will be added soon. This README will be updated when it becomes available.
