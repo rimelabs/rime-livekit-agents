@@ -10,5 +10,20 @@ dependencies = [
     "livekit-plugins-noise-cancellation~=0.2",
     "python-dotenv>=1.1.1",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
 [project.scripts]
 rime-agent = "rime_agent:main"
