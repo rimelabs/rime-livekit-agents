@@ -54,16 +54,6 @@ async def entrypoint(ctx: JobContext):
     await ctx.wait_for_participant()
 
     rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
-    if VOICE_CONFIGS[VOICE].get("sentence_tokenizer"):
-        sentence_tokenizer = VOICE_CONFIGS[VOICE].get("sentence_tokenizer")
-        if not isinstance(sentence_tokenizer, tokenizer.SentenceTokenizer):
-            raise TypeError(
-                f"Expected sentence_tokenizer to be an instance of tokenizer.SentenceTokenizer, got {type(sentence_tokenizer)}"
-            )
-        rime_tts = tts.StreamAdapter(
-            tts=rime_tts, sentence_tokenizer=sentence_tokenizer
-        )
-
     session = AgentSession(
         stt=openai.STT(
             model=OPENAI_TRANSCRIPT_MODEL,

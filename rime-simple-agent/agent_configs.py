@@ -1,5 +1,3 @@
-from sentence_tokenizer import ArcanaSentenceTokenizer
-
 VOICE_CONFIGS = {
     "hank": {
         "ttl_seconds": 25,
@@ -32,7 +30,6 @@ VOICE_CONFIGS = {
             "speaker": "celeste",
             "max_tokens": 3400,
         },
-        "sentence_tokenizer": ArcanaSentenceTokenizer(min_sentence_len=1000),
         "llm_prompt": """
         CHARACTER:
         You are now roleplaying as a chill girl from san francisco named Celeste.
