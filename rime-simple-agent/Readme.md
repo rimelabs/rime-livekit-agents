@@ -65,3 +65,58 @@ OPENAI_API_KEY=<your_openai_api_key>
   - Sign up or log in at [Deepgram Console](https://console.deepgram.com/project/b10a1314-1443-4796-811f-f099e5da682e) to generate your API key
 - **OpenAI API Key:**
   - Sign up or log in at [OpenAI Platform](https://platform.openai.com/settings/organization/api-keys) to generate your API key
+
+## Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+# Using HTTPS
+git clone https://github.com/rimelabs/rime-livekit-agents.git
+
+# Or using SSH
+git clone git@github.com:rimelabs/rime-livekit-agents.git
+```
+
+### 2. Navigate to Project Directory
+
+```bash
+cd rime-livekit-agents/rime-simple-agent
+```
+
+### 3. Install Dependencies
+
+The project uses `uv` for package management. If you don't have it installed:
+
+```bash
+brew install uv  # For macOS using Homebrew
+```
+
+### 4. Download Required Model Files
+
+This step is required only once to set up the turn-detector, silero, and noise-cancellation plugins:
+
+```bash
+uv run rime_agent.py download-files
+```
+
+### 5. Running the Agent
+
+The agent can be run in three different modes:
+
+1. **Console Mode** - Run in terminal for local testing:
+   ```bash
+   uv run rime_agent.py console
+   ```
+
+2. **Development Mode** - Connect to LiveKit for internet-accessible testing:
+   ```bash
+   uv run rime_agent.py dev
+   ```
+
+3. **Production Mode** - Run in production environment:
+   ```bash
+   uv run rime_agent.py start
+   ```
+
+For detailed instructions on running and testing your agent, see the [LiveKit Voice AI Quickstart](https://docs.livekit.io/agents/start/voice-ai/#speak-to-your-agent).
