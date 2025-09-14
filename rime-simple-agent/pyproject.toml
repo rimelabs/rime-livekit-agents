@@ -1,7 +1,7 @@
 [project]
 name = "rime-simple-agent"
 version = "0.1.0"
-description = "Rime LiveKit Voice Agent"
+description = "A reference implementation of an AI voice agent using LiveKit and Rime, demonstrating a complete STT → LLM → TTS conversation pipeline"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
