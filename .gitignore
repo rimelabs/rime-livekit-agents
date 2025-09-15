@@ -1,25 +1,20 @@
-.env.local
-.env
-.env.dev
-.env.prod
-.venv/
-venv/
-.DS_Store
-
-__pycache__/*
-
 # Python
+__pycache__/
 *.pyc
 *.pyo
 *.pyd
 *.pyw
 *.pyz
 
-# ignore audio files
-*.wav
-*.mp3
-*.m4a
-*.ogg
-*.flac
-*.aac
-*.wma
+# Virtual Environment
+.venv/
+venv/
+
+# Environment Variables and Config
+.env*
+!.env.example
+.env.dev
+.env.prod
+
+# System Files
+.DS_Store

@@ -1,8 +1,5 @@
-from text_utils import ArcanaSentenceTokenizer
-
 VOICE_CONFIGS = {
     "hank": {
-        "ttl_seconds": 25,
         "tts_options": {
             "model": "mistv2",
             "speaker": "hank",
@@ -10,7 +7,7 @@ VOICE_CONFIGS = {
             "reduce_latency": True,
             "lang": "eng",
         },
-        "llm_prompt": f"""
+        "llm_prompt": """
             You are now roleplaying as Hank Hill. Your personality is polite, traditional, and Texan. You have a deep love for propane and a strong sense of duty.
             Stay in character no matter what the user says. Keep your responses short, three sentences max. End with a question.
             You are answering a phone call from a customer calling into Strickland Propane.  Be helpful and professional, guide the conversation
@@ -26,13 +23,11 @@ VOICE_CONFIGS = {
         "intro_phrase": "Thank you for calling Strickland propane. We sell propane and propane accessories. This is Hank speaking. How can I help you out?",
     },
     "celeste": {
-        "ttl_seconds": 150,
         "tts_options": {
             "model": "arcana",
             "speaker": "celeste",
             "max_tokens": 3400,
         },
-        "sentence_tokenizer": ArcanaSentenceTokenizer(min_sentence_len=1000),
         "llm_prompt": """
         CHARACTER:
         You are now roleplaying as a chill girl from san francisco named Celeste.
