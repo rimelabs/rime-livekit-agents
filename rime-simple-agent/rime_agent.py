@@ -30,8 +30,8 @@ from agent_configs import VOICE_CONFIGS
 load_dotenv()
 logger = logging.getLogger("voice-agent")
 
-VOICE_NAMES = ["hank", "celeste"]
-OPENAI_MODEL = "gpt-4o-mini"
+VOICE_NAMES = [ "anderson_jake"]
+OPENAI_MODEL = "gpt-4o"
 OPENAI_TRANSCRIPT_MODEL = "gpt-4o-transcribe"
 VOICE = random.choice(VOICE_NAMES)
 
