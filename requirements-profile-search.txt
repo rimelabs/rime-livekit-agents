@@ -1,0 +1,22 @@
+# Profile Search Additional Requirements
+# Install these on top of the base requirements.txt
+
+# Web Framework
+fastapi==0.109.0
+uvicorn[standard]==0.27.0
+python-multipart==0.0.6
+
+# Database
+aiosqlite==0.19.0
+
+# HTTP Client
+aiohttp==3.11.16
+
+# Search APIs (choose one or more)
+google-api-python-client==2.116.0
+google-search-results==2.4.2  # SerpAPI client
+
+# Already in base requirements.txt but listing for reference:
+# openai==1.72.0
+# python-dotenv==1.1.0
+# pydantic==2.11.3
