@@ -1,25 +1,86 @@
-.env.local
-.env
-.env.dev
-.env.prod
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
 .venv/
 venv/
+ENV/
+env/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
 
-__pycache__/*
+# Database
+database/*.db
+database/*.db-journal
+*.sqlite
+*.sqlite3
 
-# Python
-*.pyc
-*.pyo
-*.pyd
-*.pyw
-*.pyz
+# Logs
+*.log
+logs/
 
-# ignore audio files
-*.wav
-*.mp3
-*.m4a
-*.ogg
-*.flac
-*.aac
-*.wma
+# FastAPI / Uvicorn
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Next.js / Node.js
+web_ui/node_modules/
+web_ui/.next/
+web_ui/out/
+web_ui/build/
+web_ui/.DS_Store
+web_ui/*.tsbuildinfo
+web_ui/.env
+web_ui/.env.local
+web_ui/.env.development.local
+web_ui/.env.test.local
+web_ui/.env.production.local
+
+# npm / yarn
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Testing
+.coverage
+coverage/
+.nyc_output
+
+# Misc
+*.bak
+.cache/
+temp/
+tmp/
