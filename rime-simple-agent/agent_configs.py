@@ -13,7 +13,7 @@ VOICE_CONFIGS = {
     "anderson_jake": {
         "tts_options": {
             "model": "arcana",
-            "speaker": "anderson_jake",
+            "speaker": "brown_alex",
         },
         "llm_prompt": """# CORE DIRECTIVE: PERSONA EMBODIMENT
 

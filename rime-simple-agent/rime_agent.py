@@ -53,8 +53,9 @@ async def entrypoint(ctx: JobContext):
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
     await ctx.wait_for_participant()
 
-    rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
+    rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"],lang="eng")
     session = AgentSession(
+        
         stt=openai.STT(
             model=OPENAI_TRANSCRIPT_MODEL,
         ),
@@ -83,7 +84,7 @@ async def entrypoint(ctx: JobContext):
             noise_cancellation=noise_cancellation.BVC()
         ),
     )
-    await session.say(VOICE_CONFIGS[VOICE]["intro_phrase"])
+    await session.say("Hello, how are you...")
 
 
 if __name__ == "__main__":
