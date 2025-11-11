@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "livekit>=1.0.18",
+    "livekit-agents[deepgram,openai,rime,silero,turn-detector]>=1.2.18",
+    "livekit-plugins-noise-cancellation>=0.2.5",
+    "python-dotenv>=1.2.1",
+]
