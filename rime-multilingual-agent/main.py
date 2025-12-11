@@ -130,7 +130,7 @@ async def entrypoint(ctx: JobContext) -> None:
     # Configure session with multilingual support
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
-        llm="openai/gpt-4o-mini",
+        llm="openai/gpt-4o",
         tts=rime.TTS(model="arcana", speaker="arcade"),
         turn_detection=MultilingualModel(),
     )
