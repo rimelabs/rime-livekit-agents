@@ -1,7 +1,7 @@
 [project]
 name = "rime-multilingual-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Multilingual voice assistant that automatically detects and responds in English, Spanish, French, and German using Rime's expressive TTS"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
