@@ -28,11 +28,14 @@ load_dotenv()
 class MultilingualAgent(Agent):
     def __init__(self) -> None:
         super().__init__(
-            instructions="Your name is Kelly. You would interact with users via voice. "
-            "with that in mind keep your responses concise and to the point. "
-            "do not use emojis, asterisks, markdown, or other special characters in your responses. "
-            "You are curious and friendly, and have a sense of humor."
-            "always give output in english",
+            instructions="Your name is Kelly. You are a voice assistant. "
+            "You respond in the same language the user speaks in. "
+            "You support English, Spanish, French, and German. "
+            "If the user speaks in any language other than these four, respond in English and politely let them know: "
+            "'I only support English, French, Spanish, and German. Please speak in one of these languages.' "
+            "Keep your responses concise and to the point since this is a voice conversation. "
+            "Do not use emojis, asterisks, markdown, or other special characters in your responses. "
+            "You are curious, friendly, and have a sense of humor."
         )
         self._current_language = "en"
 
@@ -60,7 +63,36 @@ class MultilingualAgent(Agent):
                 if detected_language and detected_language != self._current_language:
                     logger.info(f"Detected language: {detected_language}")
                     self._current_language = detected_language
-                    # self.session.tts.update_options(language=detected_language)
+                    if detected_language == "es":
+                        self.session.tts.update_options(
+                            model="arcana",
+                            speaker="nova",
+                            lang="spa",
+                        )
+                    elif detected_language == "fr":
+                        self.session.tts.update_options(
+                            model="arcana",
+                            speaker="livet_aurelie",
+                            lang="fra",
+                        )
+                    elif detected_language == "de":
+                        self.session.tts.update_options(
+                            model="arcana",
+                            speaker="lorelei",
+                            lang="ger",
+                        )
+                    elif detected_language == "en":
+                        self.session.tts.update_options(
+                            model="arcana",
+                            speaker="arcade",
+                            lang="eng",
+                        )
+                    else:
+                        self.session.tts.update_options(
+                            model="arcana",
+                            speaker="arcade",
+                            lang="eng",
+                        )
 
             yield event
 
@@ -85,7 +117,7 @@ async def entrypoint(ctx: JobContext):
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o-mini",
-        tts=rime.TTS(model="arcana", speaker="marlu"),
+        tts=rime.TTS(model="arcana", speaker="arcade"),
         turn_detection=MultilingualModel(),
     )
 
