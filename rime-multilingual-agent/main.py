@@ -99,15 +99,6 @@ class MultilingualAgent(Agent):
     async def on_enter(self):
         self.session.generate_reply()
 
-    @function_tool
-    async def lookup_weather(
-        self, context: RunContext, location: str, latitude: str, longitude: str
-    ):
-        """Called when the user asks for weather related information."""
-        logger.info(f"Looking up weather for {location}")
-        return "sunny with a temperature of 70 degrees."
-
-
 def prewarm(proc: JobProcess):
     proc.userdata["vad"] = silero.VAD.load()
 
