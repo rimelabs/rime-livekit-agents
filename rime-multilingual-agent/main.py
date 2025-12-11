@@ -18,7 +18,6 @@ from livekit.agents import (
 from livekit.agents.llm import function_tool
 from livekit.plugins import silero, deepgram, rime
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
-from livekit.plugins import noise_cancellation
 from livekit import rtc
 
 
