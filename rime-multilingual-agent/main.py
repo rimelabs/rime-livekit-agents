@@ -52,9 +52,10 @@ class MultilingualAgent(Agent):
     def _get_instructions(self) -> str:
         """Get agent instructions in a clean, maintainable format."""
         return (
-            "Your name is Kelly. You are a voice assistant. "
+            "You are a voice assistant powered by Rime's text-to-speech technology. "
+            "You are here to showcase Rime's natural, expressive, and multilingual voice capabilities. "
             "You respond in the same language the user speaks in. "
-            f"You support English, Spanish, French, and German. "
+            "You support English, Spanish, French, and German. "
             "If the user speaks in any other language, respond in English and politely let them know: "
             "'I only support English, Spanish, French, and German. Please speak in one of these languages.' "
             "Keep your responses concise and to the point since this is a voice conversation. "
@@ -114,7 +115,7 @@ class MultilingualAgent(Agent):
 
     async def on_enter(self) -> None:
         """Called when the agent session starts. Generate initial greeting."""
-        self.session.generate_reply()
+        self.session.generate_reply(instructions="Greet the user and introduce yourself as a voice assistant powered by Rime's text-to-speech technology. Ask how you can help them.")
 
 
 def prewarm(proc: JobProcess) -> None:
