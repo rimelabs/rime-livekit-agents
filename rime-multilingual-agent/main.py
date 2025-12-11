@@ -8,10 +8,8 @@ from livekit.agents import (
     JobProcess,
     MetricsCollectedEvent,
     ModelSettings,
-    RoomInputOptions,
     RoomOutputOptions,
     RunContext,
-    UserInputTranscribedEvent,
     WorkerOptions,
     cli,
     metrics,
@@ -39,6 +37,33 @@ class MultilingualAgent(Agent):
         )
         self._current_language = "en"
 
+    async def stt_node(
+        self, audio: AsyncIterable[rtc.AudioFrame], model_settings: ModelSettings
+    ) -> AsyncIterable[stt.SpeechEvent]:
+        """
+        Override STT node to detect and log language from speech events.
+        """
+        # Get the default STT node implementation
+        default_stt = super().stt_node(audio, model_settings)
+
+        # Process each speech event and extract language info
+        async for event in default_stt:
+            if (
+                event.type
+                in [
+                    stt.SpeechEventType.INTERIM_TRANSCRIPT,
+                    stt.SpeechEventType.FINAL_TRANSCRIPT,
+                ]
+                and event.alternatives
+            ):
+                logger.info(f"Speech event: {event}")
+                detected_language = event.alternatives[0].language
+                if detected_language and detected_language != self._current_language:
+                    logger.info(f"Detected language: {detected_language}")
+                    self._current_language = detected_language
+                    # self.session.tts.update_options(language=detected_language)
+
+            yield event
 
     async def on_enter(self):
         self.session.generate_reply()
@@ -63,7 +88,6 @@ async def entrypoint(ctx: JobContext):
         llm="openai/gpt-4o-mini",
         tts=rime.TTS(model="arcana", speaker="marlu"),
         turn_detection=MultilingualModel(),
-        vad=ctx.proc.userdata["vad"],
     )
 
     usage_collector = metrics.UsageCollector()
@@ -83,9 +107,6 @@ async def entrypoint(ctx: JobContext):
     await session.start(
         agent=agent_instance,
         room=ctx.room,
-        room_input_options=RoomInputOptions(
-            noise_cancellation=noise_cancellation.BVC()
-        ),
         room_output_options=RoomOutputOptions(transcription_enabled=True),
     )
 
