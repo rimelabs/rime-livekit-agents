@@ -9,8 +9,10 @@ This public repository showcases how to run Rime with LiveKit to build real‑ti
   - This is a simple script that serves as a perfect starting point for developers who want to see a basic STT-LLM-TTS implementation and build on top of it.
   - The code is intentionally kept straightforward and well-documented so you can easily understand, download, and run it as a foundation for your own voice agent implementation.
 
-- Additional example(s)
-  - A second, slightly more advanced project will be added soon. This README will be updated when it becomes available.
+- Rime Multilingual Agent
+  - A multilingual voice agent that demonstrates automatic language detection and dynamic voice switching using LiveKit, Deepgram STT, and Rime TTS.
+  - The agent detects the user's language in real-time and automatically responds in the same language, supporting English, Spanish, French, and German.
+  - This example showcases how to override the STT node to intercept speech events, detect language changes, and dynamically update TTS configuration for natural multilingual conversations.
 
 
 
