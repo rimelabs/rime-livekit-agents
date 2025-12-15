@@ -16,11 +16,14 @@ from livekit.agents import (
     stt,
 )
 from livekit.plugins import silero, deepgram, rime
+from livekit.plugins.rime.tts import RIME_BASE_URL
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit import rtc
 
 
 logger = logging.getLogger("multilingual-agent")
+RIME_BASE_BILINGUAL_URL = "https://cyan.atlas-east.rime.ai"
+RIME_BASE_UNILINGUAL_URL = "https://users.rime.ai/v1/rime-tts"
 load_dotenv()
 
 
@@ -30,17 +33,19 @@ class LanguageConfig:
 
     speaker: str
     lang: str
+    base_url: str
     model: str = "arcana"
+    
 
 class MultilingualAgent(Agent):
     """A multilingual voice agent that detects user language and responds accordingly."""
 
     # Language mappings for cleaner configuration
     LANGUAGE_CONFIGS = {
-        "en": LanguageConfig(speaker="arcade", lang="eng"),
-        "es": LanguageConfig(speaker="nova", lang="spa"),
-        "fr": LanguageConfig(speaker="livet_aurelie", lang="fra"),
-        "de": LanguageConfig(speaker="lorelei", lang="ger"),
+        "en": LanguageConfig(speaker="celeste", lang="eng", base_url=RIME_BASE_BILINGUAL_URL),
+        "es": LanguageConfig(speaker="astra", lang="spa", base_url=RIME_BASE_BILINGUAL_URL),
+        "fr": LanguageConfig(speaker="livet_aurelie", lang="fra", base_url=RIME_BASE_URL),
+        "de": LanguageConfig(speaker="lorelei", lang="ger", base_url=RIME_BASE_URL),
     }
 
     SUPPORTED_LANGUAGES = list(LANGUAGE_CONFIGS.keys())
@@ -111,6 +116,7 @@ class MultilingualAgent(Agent):
             model=config.model,
             speaker=config.speaker,
             lang=config.lang,
+            base_url=config.base_url,
         )
 
     async def on_enter(self) -> None:
@@ -131,7 +137,7 @@ async def entrypoint(ctx: JobContext) -> None:
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
-        tts=rime.TTS(model="arcana", speaker="arcade"),
+        tts=rime.TTS(model="arcana", speaker="celeste", base_url=RIME_BASE_BILINGUAL_URL),
         turn_detection=MultilingualModel(),
     )
 
