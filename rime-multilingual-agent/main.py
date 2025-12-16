@@ -16,14 +16,16 @@ from livekit.agents import (
     stt,
 )
 from livekit.plugins import silero, deepgram, rime
-from livekit.plugins.rime.tts import RIME_BASE_URL
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit import rtc
 
 
 logger = logging.getLogger("multilingual-agent")
-RIME_BASE_BILINGUAL_URL = "https://cyan.atlas-east.rime.ai"
-RIME_BASE_UNILINGUAL_URL = "https://users.rime.ai/v1/rime-tts"
+
+
+RIME_ENG_SPA_CUSTOM_URL = "https://cyan.atlas-east.rime.ai"
+RIME_BASE_URL = "https://users.rime.ai/v1/rime-tts"
+
 load_dotenv()
 
 
@@ -42,8 +44,8 @@ class MultilingualAgent(Agent):
 
     # Language mappings for cleaner configuration
     LANGUAGE_CONFIGS = {
-        "en": LanguageConfig(speaker="celeste", lang="eng", base_url=RIME_BASE_BILINGUAL_URL),
-        "es": LanguageConfig(speaker="astra", lang="spa", base_url=RIME_BASE_BILINGUAL_URL),
+        "en": LanguageConfig(speaker="celeste", lang="eng", base_url=RIME_ENG_SPA_CUSTOM_URL),
+        "es": LanguageConfig(speaker="astra", lang="spa", base_url=RIME_ENG_SPA_CUSTOM_URL),
         "fr": LanguageConfig(speaker="livet_aurelie", lang="fra", base_url=RIME_BASE_URL),
         "de": LanguageConfig(speaker="lorelei", lang="ger", base_url=RIME_BASE_URL),
     }
@@ -137,7 +139,7 @@ async def entrypoint(ctx: JobContext) -> None:
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
-        tts=rime.TTS(model="arcana", speaker="celeste", base_url=RIME_BASE_BILINGUAL_URL),
+        tts=rime.TTS(model="arcana", speaker="celeste", base_url=RIME_ENG_SPA_CUSTOM_URL),
         turn_detection=MultilingualModel(),
     )
 
