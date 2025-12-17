@@ -137,6 +137,7 @@ async def entrypoint(ctx: JobContext) -> None:
 
     # Configure session with multilingual support
     session = AgentSession(
+        vad=ctx.proc.userdata["vad"],
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
         tts=rime.TTS(model="arcana", speaker="celeste", base_url=RIME_ENG_SPA_CUSTOM_URL),
