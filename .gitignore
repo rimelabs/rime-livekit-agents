@@ -6,9 +6,7 @@ __pycache__/
 *.pyw
 *.pyz
 
-# Virtual Environment
-.venv/
-venv/
+
 
 # Environment Variables and Config
 .env*
@@ -18,3 +16,4 @@ venv/
 
 # System Files
 .DS_Store
+.vscode
