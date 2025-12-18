@@ -136,7 +136,7 @@ async def entrypoint(ctx: JobContext) -> None:
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
-        tts=inference.TTS(  # Changed from rime.TTS
+        tts=inference.TTS( 
             model="rime/arcana", voice="celeste", language="en"
         ),
         turn_detection=MultilingualModel(),
