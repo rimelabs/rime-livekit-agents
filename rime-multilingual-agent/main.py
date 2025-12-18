@@ -14,6 +14,7 @@ from livekit.agents import (
     cli,
     metrics,
     stt,
+    inference,
 )
 from livekit.plugins import silero, deepgram, rime
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
@@ -33,7 +34,6 @@ class LanguageConfig:
     speaker: str
     lang: str
     model: str = "arcana"
-    
 
 class MultilingualAgent(Agent):
     """A multilingual voice agent that detects user language and responds accordingly."""
@@ -41,8 +41,8 @@ class MultilingualAgent(Agent):
     # Language mappings for cleaner configuration
     LANGUAGE_CONFIGS = {
         "en": LanguageConfig(speaker="celeste", lang="eng"),
-        "es": LanguageConfig(speaker="astra", lang="spa"),
-        "fr": LanguageConfig(speaker="livet_aurelie", lang="fra"),
+        "es": LanguageConfig(speaker="ursa", lang="spa"),
+        "fr": LanguageConfig(speaker="destin", lang="fra"),
         "de": LanguageConfig(speaker="lorelei", lang="ger"),
     }
 
@@ -111,14 +111,16 @@ class MultilingualAgent(Agent):
         config = self.LANGUAGE_CONFIGS.get(language, self.LANGUAGE_CONFIGS["en"])
 
         self.session.tts.update_options(
-            model=config.model,
-            speaker=config.speaker,
-            lang=config.lang,
+            model=f"rime/{config.model}",
+            voice=config.speaker,
+            language=config.lang,
         )
 
     async def on_enter(self) -> None:
         """Called when the agent session starts. Generate initial greeting."""
-        self.session.generate_reply(instructions="Greet the user and introduce yourself as a voice assistant powered by Rime's text-to-speech technology. Ask how you can help them.")
+        self.session.generate_reply(
+            instructions="Greet the user and introduce yourself as a voice assistant powered by Rime's text-to-speech technology. Ask how you can help them."
+        )
 
 
 def prewarm(proc: JobProcess) -> None:
@@ -134,7 +136,9 @@ async def entrypoint(ctx: JobContext) -> None:
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
-        tts=rime.TTS(model="arcana", speaker="celeste"),
+        tts=inference.TTS(  # Changed from rime.TTS
+            model="rime/arcana", voice="celeste", language="en"
+        ),
         turn_detection=MultilingualModel(),
     )
 
