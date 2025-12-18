@@ -14,6 +14,7 @@ from livekit.agents import (
     cli,
     metrics,
     stt,
+    inference,
 )
 from livekit.plugins import silero, deepgram, rime
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
@@ -22,9 +23,6 @@ from livekit import rtc
 
 logger = logging.getLogger("multilingual-agent")
 
-
-RIME_ENG_SPA_CUSTOM_URL = "https://cyan.atlas-east.rime.ai"
-RIME_BASE_URL = "https://users.rime.ai/v1/rime-tts"
 
 load_dotenv()
 
@@ -35,19 +33,17 @@ class LanguageConfig:
 
     speaker: str
     lang: str
-    base_url: str
     model: str = "arcana"
-    
 
 class MultilingualAgent(Agent):
     """A multilingual voice agent that detects user language and responds accordingly."""
 
     # Language mappings for cleaner configuration
     LANGUAGE_CONFIGS = {
-        "en": LanguageConfig(speaker="celeste", lang="eng", base_url=RIME_ENG_SPA_CUSTOM_URL),
-        "es": LanguageConfig(speaker="astra", lang="spa", base_url=RIME_ENG_SPA_CUSTOM_URL),
-        "fr": LanguageConfig(speaker="livet_aurelie", lang="fra", base_url=RIME_BASE_URL),
-        "de": LanguageConfig(speaker="lorelei", lang="ger", base_url=RIME_BASE_URL),
+        "en": LanguageConfig(speaker="celeste", lang="en"),
+        "es": LanguageConfig(speaker="ursa", lang="es"),
+        "fr": LanguageConfig(speaker="destin", lang="fr"),
+        "de": LanguageConfig(speaker="lorelei", lang="de"),
     }
 
     SUPPORTED_LANGUAGES = list(LANGUAGE_CONFIGS.keys())
@@ -113,17 +109,18 @@ class MultilingualAgent(Agent):
     def _update_tts_for_language(self, language: str) -> None:
         """Update TTS configuration based on detected language."""
         config = self.LANGUAGE_CONFIGS.get(language, self.LANGUAGE_CONFIGS["en"])
-
+        logger.info(f"Updating TTS configuration for language: {language}")
         self.session.tts.update_options(
-            model=config.model,
-            speaker=config.speaker,
-            lang=config.lang,
-            base_url=config.base_url,
+            model=f"rime/{config.model}",
+            voice=config.speaker,
+            language=config.lang,
         )
 
     async def on_enter(self) -> None:
         """Called when the agent session starts. Generate initial greeting."""
-        self.session.generate_reply(instructions="Greet the user and introduce yourself as a voice assistant powered by Rime's text-to-speech technology. Ask how you can help them.")
+        self.session.generate_reply(
+            instructions="Greet the user and introduce yourself as a voice assistant powered by Rime's text-to-speech technology. Ask how you can help them."
+        )
 
 
 def prewarm(proc: JobProcess) -> None:
@@ -139,7 +136,9 @@ async def entrypoint(ctx: JobContext) -> None:
     session = AgentSession(
         stt=deepgram.STT(model="nova-3-general", language="multi"),
         llm="openai/gpt-4o",
-        tts=rime.TTS(model="arcana", speaker="celeste", base_url=RIME_ENG_SPA_CUSTOM_URL),
+        tts=inference.TTS( 
+            model="rime/arcana", voice="celeste", language="en"
+        ),
         turn_detection=MultilingualModel(),
     )
 
