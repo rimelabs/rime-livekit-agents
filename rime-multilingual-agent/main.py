@@ -43,7 +43,7 @@ class MultilingualAgent(Agent):
         "en": LanguageConfig(speaker="celeste", lang="en"),
         "es": LanguageConfig(speaker="ursa", lang="es"),
         "fr": LanguageConfig(speaker="destin", lang="fr"),
-        "de": LanguageConfig(speaker="lorelei", lang="de"),
+        "de": LanguageConfig(speaker="sigurd", lang="de"),
     }
 
     SUPPORTED_LANGUAGES = list(LANGUAGE_CONFIGS.keys())
@@ -110,6 +110,7 @@ class MultilingualAgent(Agent):
         """Update TTS configuration based on detected language."""
         config = self.LANGUAGE_CONFIGS.get(language, self.LANGUAGE_CONFIGS["en"])
         logger.info(f"Updating TTS configuration for language: {language}")
+        logger.info(f"Config: {config}")
         self.session.tts.update_options(
             model=f"rime/{config.model}",
             voice=config.speaker,
