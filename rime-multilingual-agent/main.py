@@ -16,7 +16,7 @@ from livekit.agents import (
     stt,
     inference,
 )
-from livekit.plugins import silero, deepgram, rime
+from livekit.plugins import silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit import rtc
 
@@ -136,8 +136,8 @@ async def entrypoint(ctx: JobContext) -> None:
     # Configure session with multilingual support
     session = AgentSession(
         vad=ctx.proc.userdata["vad"],
-        stt=deepgram.STT(model="nova-3-general", language="multi"),
-        llm="openai/gpt-4o",
+        stt=inference.STT(model="deepgram/nova-3-general", language="multi"),
+        llm=inference.LLM(model="openai/gpt-4o"),
         tts=inference.TTS( 
             model="rime/arcana", voice="celeste", language="en"
         ),
