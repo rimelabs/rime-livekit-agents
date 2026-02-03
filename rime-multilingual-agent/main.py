@@ -135,6 +135,7 @@ async def entrypoint(ctx: JobContext) -> None:
 
     # Configure session with multilingual support
     session = AgentSession(
+        vad=ctx.proc.userdata["vad"],
         stt=inference.STT(model="deepgram/nova-3-general", language="multi"),
         llm=inference.LLM(model="openai/gpt-4o"),
         tts=inference.TTS( 
