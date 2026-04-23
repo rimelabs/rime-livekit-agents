@@ -127,27 +127,57 @@ class APICustomPronunciationsSource(CustomPronunciationsSource):
 def _project_list_response(body: dict) -> CustomPronunciationMap:
     """
     Project the `GET /speech-qa/custom-pronunciations` response into a lookup map.
-    Shape per the SpeechQA 2.0 wire contract:
 
-        {
-          customPronunciations: [
-            { id, inputText, pronunciation, oovWordId, customerContext,
-              createdAt, updatedAt },
-            ...
-          ]
-        }
+    Tolerates two server response shapes:
 
-    `oovWordId` is irrelevant at runtime — the plugin matches on
-    `inputText` directly. Entries missing inputText or pronunciation are
-    dropped silently.
+    1. SpeechQA 2.0 customer API shape (rime-supabase PR #538):
+
+           {
+             customPronunciations: [
+               { id, inputText, pronunciation, customerContext,
+                 createdAt, updatedAt },
+               ...
+             ]
+           }
+
+    2. Legacy shape that the deployed optimize.rime.ai still emits
+       (POST writes rows that GET reads via a legacy projection):
+
+           {
+             default: { inputText: pronunciation, ... },
+             vocabs:  { ... }
+           }
+
+    Entries missing inputText or pronunciation are dropped silently.
+    Input text is normalized to lowercase — the plugin's match-time
+    regex is case-insensitive, and the lookup map is keyed lowercase.
     """
     out: CustomPronunciationMap = {}
-    for row in body.get("customPronunciations") or []:
-        input_text = (row.get("inputText") or "").strip()
-        pron = row.get("pronunciation")
-        if not input_text or not pron:
-            continue
-        out[input_text.lower()] = pron
+
+    # Preferred: v2 shape.
+    rows = body.get("customPronunciations")
+    if isinstance(rows, list):
+        for row in rows:
+            if not isinstance(row, dict):
+                continue
+            input_text = (row.get("inputText") or "").strip()
+            pron = row.get("pronunciation")
+            if not input_text or not pron:
+                continue
+            out[input_text.lower()] = pron
+        if out:
+            return out
+
+    # Legacy fallback: {default: {input_text: pronunciation}, vocabs: {...}}
+    default = body.get("default")
+    if isinstance(default, dict):
+        for input_text, pron in default.items():
+            if not isinstance(input_text, str) or not isinstance(pron, str):
+                continue
+            if not input_text.strip() or not pron:
+                continue
+            out[input_text.strip().lower()] = pron
+
     return out
 
 
