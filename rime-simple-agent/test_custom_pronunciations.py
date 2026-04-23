@@ -199,7 +199,7 @@ def test_api_source_projects_three_row_response(monkeypatch):
         "dr.": "d1aktx0r",
         "lisinopril 10mg": "l0Is1Inxpr0Il t1En m0Il0Igr@m",
     }
-    assert session.last_url == "https://users.rime.ai/speech-qa/custom-pronunciations"
+    assert session.last_url == "https://optimize.rime.ai/speech-qa/custom-pronunciations"
     assert session.last_headers["Authorization"] == "Bearer test-key"
 
     # Confirm the rewrite picks up all three after a real API-shaped load.

@@ -88,7 +88,11 @@ class APICustomPronunciationsSource(CustomPronunciationsSource):
     nothing at runtime.
     """
 
-    DEFAULT_BASE_URL = "https://users.rime.ai"
+    # optimize.rime.ai is the host that serves the /speech-qa/* app-api
+    # routes. users.rime.ai is the TTS endpoint only — its /speech-qa/*
+    # paths fall through to the TTS handler and return empty/error
+    # bodies. Same API key works on both.
+    DEFAULT_BASE_URL = "https://optimize.rime.ai"
 
     def __init__(
         self,
