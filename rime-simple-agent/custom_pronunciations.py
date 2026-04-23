@@ -19,7 +19,7 @@ Two sources:
 
 - DictCustomPronunciationsSource — literal {input_text: phonemes} dict;
   no HTTP, no auth.
-- APICustomPronunciationsSource — GET /custom-pronunciations against the
+- APICustomPronunciationsSource — GET /speech-qa/custom-pronunciations against the
   Rime SpeechQA 2.0 customer API (billable-scoped via API key).
 
 Typical use:
@@ -82,7 +82,7 @@ class APICustomPronunciationsSource(CustomPronunciationsSource):
     Fetches the billable's custom pronunciations from the Rime SpeechQA 2.0
     customer API.
 
-    Hits `GET {base_url}/custom-pronunciations` and projects the response to
+    Hits `GET {base_url}/speech-qa/custom-pronunciations` and projects the response to
     an {input_text_lower: phonemes} dict. The billable is determined from
     the API key; there is no vocab_id/vocab_key parameter — vocabs do
     nothing at runtime.
@@ -108,7 +108,7 @@ class APICustomPronunciationsSource(CustomPronunciationsSource):
         # when this path runs inside the agent.
         import aiohttp
 
-        url = f"{self.base_url}/custom-pronunciations"
+        url = f"{self.base_url}/speech-qa/custom-pronunciations"
         headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Accept": "application/json",
@@ -122,7 +122,7 @@ class APICustomPronunciationsSource(CustomPronunciationsSource):
 
 def _project_list_response(body: dict) -> CustomPronunciationMap:
     """
-    Project the `GET /custom-pronunciations` response into a lookup map.
+    Project the `GET /speech-qa/custom-pronunciations` response into a lookup map.
     Shape per the SpeechQA 2.0 wire contract:
 
         {
