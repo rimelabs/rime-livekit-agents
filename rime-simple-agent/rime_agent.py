@@ -29,8 +29,8 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit.agents.tokenize import tokenizer
 from agent_configs import VOICE_CONFIGS
 from custom_pronunciations import (
+    APICustomPronunciationsSource,
     CustomPronunciationMap,
-    DictCustomPronunciationsSource,
     load_custom_pronunciations,
     rewrite_tts_stream,
 )
@@ -43,16 +43,6 @@ VOICE_NAMES = ["hank", "celeste"]
 OPENAI_MODEL = "gpt-4o-mini"
 OPENAI_TRANSCRIPT_MODEL = "gpt-4o-transcribe"
 VOICE = random.choice(VOICE_NAMES)
-
-# Prototype mock map. Swap for APICustomPronunciationsSource() once the
-# SpeechQA 2.0 backend is live; until then a literal dict is the fastest
-# way to iterate on which pronunciations matter. Keys are input_text
-# (lowercase; matching is case-insensitive at runtime).
-MOCK_CUSTOM_PRONUNCIATIONS: dict[str, str] = {
-    "lisinopril": "l0Is1Inxpr0Il",
-    "pfizer": "f0Iz1@r",
-    "whopper": "w1Ap@r",
-}
 
 
 def prewarm(proc: JobProcess):
@@ -84,9 +74,10 @@ async def entrypoint(ctx: JobContext):
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
     await ctx.wait_for_participant()
 
-    prons = await load_custom_pronunciations(
-        DictCustomPronunciationsSource(MOCK_CUSTOM_PRONUNCIATIONS)
-    )
+    # Pulls the caller's billable-scoped pronunciations from the SpeechQA
+    # 2.0 customer API. RIME_API_KEY in the env authenticates the request;
+    # the map is fetched once at agent start and cached for the session.
+    prons = await load_custom_pronunciations(APICustomPronunciationsSource())
 
     rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
     session = AgentSession(
