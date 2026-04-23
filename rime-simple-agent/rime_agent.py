@@ -1,13 +1,16 @@
 import logging
 import random
+from typing import AsyncIterable
 
 from dotenv import load_dotenv
+from livekit import rtc
 from livekit.agents import (
     Agent,
     AgentSession,
     AutoSubscribe,
     JobContext,
     JobProcess,
+    ModelSettings,
     tts,
     metrics,
     RoomInputOptions,
@@ -25,6 +28,12 @@ from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 from livekit.agents.tokenize import tokenizer
 from agent_configs import VOICE_CONFIGS
+from custom_pronunciations import (
+    APICustomPronunciationsSource,
+    CustomPronunciationMap,
+    load_custom_pronunciations,
+    rewrite_tts_stream,
+)
 
 
 load_dotenv()
@@ -44,14 +53,31 @@ def prewarm(proc: JobProcess):
 class RimeAssistant(Agent):
     """Voice assistant agent for Rime platform."""
 
-    def __init__(self) -> None:
+    def __init__(self, custom_pronunciations: CustomPronunciationMap) -> None:
         super().__init__(instructions=VOICE_CONFIGS[VOICE]["llm_prompt"])
+        self._custom_pronunciations = custom_pronunciations
+
+    async def tts_node(
+        self, text: AsyncIterable[str], model_settings: ModelSettings
+    ) -> AsyncIterable[rtc.AudioFrame]:
+        # Pre-TTS rewrite: every text chunk the LLM produces passes
+        # through here before reaching the TTS engine. rewrite_tts_stream
+        # buffers into sentences so tokens split across chunks don't
+        # silently miss matches.
+        rewritten = rewrite_tts_stream(text, self._custom_pronunciations)
+        async for frame in Agent.default.tts_node(self, rewritten, model_settings):
+            yield frame
 
 
 async def entrypoint(ctx: JobContext):
     """Set up and start the voice assistant session."""
     await ctx.connect(auto_subscribe=AutoSubscribe.AUDIO_ONLY)
     await ctx.wait_for_participant()
+
+    # Pulls the caller's billable-scoped pronunciations from the SpeechQA
+    # 2.0 customer API. RIME_API_KEY in the env authenticates the request;
+    # the map is fetched once at agent start and cached for the session.
+    prons = await load_custom_pronunciations(APICustomPronunciationsSource())
 
     rime_tts = rime.TTS(**VOICE_CONFIGS[VOICE]["tts_options"])
     session = AgentSession(
@@ -78,11 +104,14 @@ async def entrypoint(ctx: JobContext):
 
     await session.start(
         room=ctx.room,
-        agent=RimeAssistant(),
+        agent=RimeAssistant(custom_pronunciations=prons),
         room_input_options=RoomInputOptions(
             noise_cancellation=noise_cancellation.BVC()
         ),
     )
+
+    # No pre-rewrite here — RimeAssistant.tts_node applies
+    # custom pronunciations to every outbound sentence, including this one.
     await session.say(VOICE_CONFIGS[VOICE]["intro_phrase"])
 
 
